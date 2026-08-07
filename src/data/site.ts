@@ -9,8 +9,14 @@
  * variables are safe to read here.
  */
 
-/** The domain the site is ultimately meant to live on. */
-export const CANONICAL_SITE_URL = "https://www.nrlifecare.com";
+/**
+ * The domain the site is ultimately meant to live on.
+ *
+ * Non-www by choice; Vercel redirects the www form to it. Changing this to the
+ * www variant, or to the .com, is a one-line edit — every canonical URL, the
+ * sitemap, robots.txt and the Open Graph tags derive from it.
+ */
+export const CANONICAL_SITE_URL = "https://nrlifecare.in";
 
 /**
  * Coerces whatever was configured into a usable origin, or undefined.

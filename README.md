@@ -290,12 +290,16 @@ A hidden honeypot field catches naive bots — a submission with it filled in ge
 
 Every page except `/api/enquiry` is prerendered at build time. The site can still be exported as a fully static bundle by adding `output: "export"` to `next.config.ts`, but doing so removes the API route, and the enquiry form falls back to opening the visitor's mail client.
 
-### Pointing www.nrlifecare.com at this site
+### Pointing nrlifecare.in at this site
 
-1. Deploy to your chosen host.
-2. Add `nrlifecare.com` and `www.nrlifecare.com` as custom domains in the host's dashboard.
-3. Update the DNS records at your domain registrar to the values the host provides.
-4. Confirm `SITE_URL` in `src/data/company.ts` matches the final canonical domain — it drives canonical URLs, the sitemap, robots.txt and Open Graph tags.
+The canonical domain is `https://nrlifecare.in`, set by `CANONICAL_SITE_URL` in `src/data/site.ts`. It drives canonical URLs, the sitemap, robots.txt and the Open Graph tags, so it must match the domain actually served.
+
+1. In Vercel → Settings → Domains, add both `nrlifecare.in` and `www.nrlifecare.in`, with the www form redirecting to the bare domain.
+2. At the registrar, create the DNS records Vercel shows — an `A` record on the apex pointing at Vercel's address, and a `CNAME` on `www`.
+3. Set `NEXT_PUBLIC_SITE_URL` to `https://nrlifecare.in` in the Production environment only. Leave it unset on preview deployments so they stay `noindex` — see "Staging vs production" above.
+4. Redeploy, then confirm `/robots.txt` reads `Allow: /` rather than `Disallow: /`.
+
+The `.in` registration renews on a shorter cycle than the company's other domains. Keep auto-renew enabled; if it lapses the site goes dark and the domain becomes available to anyone.
 
 ## SEO
 
