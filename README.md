@@ -259,17 +259,36 @@ automatically, and the new category name becomes valid in the sheet.
 
 ## The enquiry form
 
-The site is fully static, so the contact form composes a structured message and hands it to the visitor's email client or WhatsApp. Nothing is stored, and no server is required.
+The contact form posts to `/api/enquiry`, a Next.js route handler that emails the enquiry to the sales desk via [Resend](https://resend.com). Nothing is stored anywhere — the message goes straight to the inbox, and the sender's address is set as `Reply-To` so replying works normally.
 
-To deliver submissions server-side instead, wire `src/components/contact/enquiry-form.tsx` to a form backend — [Formspree](https://formspree.io), [Web3Forms](https://web3forms.com) or a Next.js route handler using [Resend](https://resend.com) all work. Replace the `handleSubmit` function with a `fetch` POST to your endpoint.
+### Setup
+
+Three environment variables, all set in the host's dashboard:
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `RESEND_API_KEY` | Yes | API key from [resend.com/api-keys](https://resend.com/api-keys). |
+| `ENQUIRY_TO` | No | Destination inbox. Defaults to `company.email`. |
+| `ENQUIRY_FROM` | No | Sender, as `Name <address@domain>`. Defaults to Resend's shared `onboarding@resend.dev`. |
+
+Resend's free tier covers 3,000 emails a month, which is far beyond what this site will generate.
+
+Until a domain is verified in Resend, the shared `onboarding@resend.dev` sender only delivers to the address that owns the Resend account. **For enquiries to reach `info@nrlifecare.com`, verify `nrlifecare.com` in Resend and set `ENQUIRY_FROM` to something like `N R Life Care <enquiries@nrlifecare.com>`.** That also stops the mail landing in spam, since it will then be SPF- and DKIM-signed.
+
+### Behaviour when it cannot send
+
+If `RESEND_API_KEY` is missing the endpoint returns `503`, and the form tells the visitor plainly and offers to open their email client with the details pre-filled. The same fallback covers network failures. This is deliberate: an enquiry that silently disappears is much worse than an inelegant fallback.
+
+### Spam handling
+
+A hidden honeypot field catches naive bots — a submission with it filled in gets a cheerful `200` and is discarded. There is also a per-instance throttle of five submissions a minute per IP. Neither is bulletproof; if spam becomes a real problem, add a captcha (Cloudflare Turnstile is free and unobtrusive).
 
 ## Deploying
 
-The site is static, so any of these work:
-
-- **Vercel** — import the repository; no configuration needed.
+- **Vercel** — import the repository; no configuration beyond the environment variables above.
 - **Netlify / Cloudflare Pages** — build command `npm run build`, and use the Next.js adapter for the platform.
-- **Any static host** — add `output: "export"` to `next.config.ts` and serve the generated `out/` directory. Note that the `next/og` generated images require build-time generation, which the export handles.
+
+Every page except `/api/enquiry` is prerendered at build time. The site can still be exported as a fully static bundle by adding `output: "export"` to `next.config.ts`, but doing so removes the API route, and the enquiry form falls back to opening the visitor's mail client.
 
 ### Pointing www.nrlifecare.com at this site
 

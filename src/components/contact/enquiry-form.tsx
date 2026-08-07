@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, WhatsApp } from "@/components/icons";
+import { ArrowRight, Check, WhatsApp } from "@/components/icons";
 import { categories } from "@/data/catalog";
 import { company } from "@/data/company";
 
@@ -37,13 +37,21 @@ const fieldClass =
 const labelClass =
   "block text-[12.5px] font-semibold tracking-[0.06em] text-sand-600 uppercase";
 
+type Status =
+  | { kind: "idle" }
+  | { kind: "sending" }
+  | { kind: "sent" }
+  | { kind: "error"; message: string; showMailto: boolean };
+
 /**
- * The site is fully static, so the form composes a structured message and hands
- * it to the user's mail client or WhatsApp. See the README for wiring this to a
- * form backend (Formspree, Resend, etc.) if server-side delivery is preferred.
+ * Posts to /api/enquiry, which emails the desk. If delivery is unavailable the
+ * form says so plainly and offers the mail-client route instead — silently
+ * losing an enquiry is far worse than an ugly fallback.
  */
 export function EnquiryForm() {
   const [form, setForm] = useState<FormState>(initialState);
+  const [status, setStatus] = useState<Status>({ kind: "idle" });
+  const [honeypot, setHoneypot] = useState("");
 
   const update =
     (field: keyof FormState) =>
@@ -71,12 +79,63 @@ export function EnquiryForm() {
       .filter((line) => line !== null)
       .join("\n");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const openMailClient = () => {
     const subject = encodeURIComponent(
       `Enquiry from ${form.name}${form.company ? ` (${form.company})` : ""} — ${form.product}`,
     );
     window.location.href = `mailto:${company.email}?subject=${subject}&body=${encodeURIComponent(composeBody())}`;
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (status.kind === "sending") return;
+
+    setStatus({ kind: "sending" });
+
+    try {
+      const response = await fetch("/api/enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, website: honeypot }),
+      });
+
+      if (response.ok) {
+        setStatus({ kind: "sent" });
+        setForm(initialState);
+        return;
+      }
+
+      const data = await response.json().catch(() => ({}));
+
+      if (response.status === 429) {
+        setStatus({
+          kind: "error",
+          message:
+            data.error ?? "Too many enquiries just now. Please try again shortly.",
+          showMailto: false,
+        });
+        return;
+      }
+
+      if (response.status === 400 && typeof data.error === "string") {
+        setStatus({ kind: "error", message: data.error, showMailto: false });
+        return;
+      }
+
+      setStatus({
+        kind: "error",
+        message:
+          "We could not send that from here. Your details are still filled in below.",
+        showMailto: true,
+      });
+    } catch {
+      setStatus({
+        kind: "error",
+        message:
+          "Network problem — the enquiry did not go through. Your details are still filled in below.",
+        showMailto: true,
+      });
+    }
   };
 
   const sendOnWhatsApp = () => {
@@ -86,8 +145,51 @@ export function EnquiryForm() {
     window.open(`${company.whatsappHref}?text=${text}`, "_blank", "noopener");
   };
 
+  if (status.kind === "sent") {
+    return (
+      <div className="rounded-3xl border border-brand-200 bg-brand-50/60 p-8 text-center sm:p-10">
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-600 text-white">
+          <Check className="h-6 w-6" />
+        </span>
+        <h3 className="mt-6 text-[21px] font-bold text-ink-900">
+          Enquiry received
+        </h3>
+        <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-sand-600">
+          It has landed on the desk in Ahmedabad. You will normally hear back
+          within one working day — sooner if you also message on WhatsApp.
+        </p>
+        <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+          <Button type="button" variant="secondary" onClick={sendOnWhatsApp}>
+            <WhatsApp className="h-4.5 w-4.5 text-[#25D366]" />
+            Also message on WhatsApp
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setStatus({ kind: "idle" })}
+          >
+            Send another enquiry
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Honeypot — hidden from people, tempting to bots. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={honeypot}
+          onChange={(event) => setHoneypot(event.target.value)}
+        />
+      </div>
+
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className={labelClass}>
@@ -226,10 +328,37 @@ export function EnquiryForm() {
         />
       </div>
 
+      {status.kind === "error" ? (
+        <div
+          role="alert"
+          className="rounded-2xl border border-red-200 bg-red-50 p-5"
+        >
+          <p className="text-[14px] leading-relaxed font-medium text-red-900">
+            {status.message}
+          </p>
+          {status.showMailto ? (
+            <button
+              type="button"
+              onClick={openMailClient}
+              className="mt-3 text-[13.5px] font-semibold text-red-900 underline underline-offset-2"
+            >
+              Open it in your email app instead →
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-        <Button type="submit" size="lg" className="sm:flex-1">
-          Send enquiry
-          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+        <Button
+          type="submit"
+          size="lg"
+          className="sm:flex-1"
+          disabled={status.kind === "sending"}
+        >
+          {status.kind === "sending" ? "Sending…" : "Send enquiry"}
+          {status.kind === "sending" ? null : (
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          )}
         </Button>
         <Button
           type="button"
@@ -244,8 +373,8 @@ export function EnquiryForm() {
       </div>
 
       <p className="text-[12.5px] leading-relaxed text-sand-500">
-        Submitting opens your email client with the details filled in, so you
-        keep a copy of exactly what was sent. Prefer to talk?{" "}
+        Your enquiry goes straight to our desk in Ahmedabad and we reply to the
+        address you give above. Prefer to talk?{" "}
         <a
           href={`tel:${company.phonePrimaryHref}`}
           className="font-semibold text-brand-700 underline underline-offset-2"
