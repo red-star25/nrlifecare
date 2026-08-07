@@ -127,6 +127,33 @@ CATALOG_CSV_URL="https://docs.google.com/..." npm run catalog:sync
 npm run build
 ```
 
+### CAS numbers and the spreadsheet date problem
+
+Google Sheets reads `114-07-8` as a date and silently rewrites it to
+`0114-07-08`. This is the same coercion that famously forced human gene names
+to be changed, and on a chemical catalogue it is a correctness problem, not a
+cosmetic one.
+
+The sync defends against it. A CAS number carries a check digit — the digits of
+the first two parts, reversed and weighted 1..n, sum mod 10 — so the zero
+padding can be stripped and the result *verified* rather than guessed. Anything
+that fails to verify is left alone and reported:
+
+```
+Repaired 18 CAS number(s) that the spreadsheet had reformatted as dates.
+  Erythromycin: 0114-07-08 → 114-07-8
+  ...
+
+2 CAS number(s) look wrong — worth checking:
+  Folic Acid (Vitamin B9): CAS "59-30-7" fails the check digit.
+```
+
+That second list is worth reading. It catches genuine typos, not just
+spreadsheet damage.
+
+To stop the mangling at source, select the CAS column in the sheet and choose
+**Format → Number → Plain text**.
+
 ### What happens when the sheet has a mistake
 
 The sync refuses to write and the Action fails loudly, leaving the live site on

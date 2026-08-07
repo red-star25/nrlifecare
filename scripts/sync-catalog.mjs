@@ -86,7 +86,34 @@ if (missingHeaders.length) {
   process.exit(1);
 }
 
+/**
+ * CAS registry numbers carry a check digit: take the digits of the first two
+ * parts, reverse them, weight by 1..n, and the sum mod 10 is the last digit.
+ */
+function casChecksumOk(cas) {
+  const parts = /^(\d{2,7})-(\d{2})-(\d)$/.exec(cas);
+  if (!parts) return false;
+  const digits = (parts[1] + parts[2]).split("").reverse();
+  const sum = digits.reduce((acc, d, i) => acc + Number(d) * (i + 1), 0);
+  return sum % 10 === Number(parts[3]);
+}
+
+/**
+ * Google Sheets eagerly reads things like `114-07-8` as a date and rewrites
+ * them as `0114-07-08`. Strip the zero padding it added, but only trust the
+ * result if it satisfies the CAS check digit — that turns a guess into a
+ * verifiable repair.
+ */
+function repairCas(cas) {
+  const parts = /^0*(\d+)-(\d+)-0*(\d)$/.exec(cas);
+  if (!parts) return null;
+  const candidate = `${parts[1]}-${parts[2].padStart(2, "0")}-${parts[3]}`;
+  return casChecksumOk(candidate) ? candidate : null;
+}
+
 const errors = [];
+const warnings = [];
+const repairs = [];
 const seen = new Map();
 const products = [];
 
@@ -116,10 +143,21 @@ for (const record of records) {
   }
   seen.set(key, record.__line);
 
+  let cas = record.cas || undefined;
+  if (cas) {
+    const repaired = repairCas(cas);
+    if (repaired && repaired !== cas) {
+      repairs.push(`${name}: ${cas} → ${repaired}`);
+      cas = repaired;
+    } else if (!casChecksumOk(cas)) {
+      warnings.push(`${name}: CAS "${cas}" fails the check digit.`);
+    }
+  }
+
   products.push({
     category: slug,
     name,
-    cas: record.cas || undefined,
+    cas,
     grade: record.grade || undefined,
     use: record.use || undefined,
   });
@@ -184,4 +222,22 @@ for (const product of products) {
 console.log(`Wrote src/data/products.generated.ts — ${products.length} products.`);
 for (const category of categoryMeta) {
   console.log(`  ${category.slug.padEnd(42)} ${counts.get(category.slug) ?? 0}`);
+}
+
+if (repairs.length) {
+  console.log(
+    `\nRepaired ${repairs.length} CAS number(s) that the spreadsheet had reformatted as dates.`,
+  );
+  for (const repair of repairs.slice(0, 20)) console.log(`  ${repair}`);
+  if (repairs.length > 20) console.log(`  … and ${repairs.length - 20} more.`);
+  console.log(
+    "\n  To stop this at the source: in the sheet select the CAS column and choose\n" +
+      "  Format → Number → Plain text.",
+  );
+}
+
+if (warnings.length) {
+  console.log(`\n${warnings.length} CAS number(s) look wrong — worth checking:`);
+  for (const warning of warnings.slice(0, 20)) console.log(`  ${warning}`);
+  if (warnings.length > 20) console.log(`  … and ${warnings.length - 20} more.`);
 }
