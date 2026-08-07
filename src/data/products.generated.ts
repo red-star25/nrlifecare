@@ -176,7 +176,7 @@ export const productRows: ProductRow[] = [
   { category: "vitamins-and-minerals", name: "Calcium D-Pantothenate (B5)", cas: "137-08-6", grade: "IP / BP / USP", use: "B-complex" },
   { category: "vitamins-and-minerals", name: "Pyridoxine Hydrochloride (B6)", cas: "58-56-0", grade: "IP / BP / USP", use: "B-complex" },
   { category: "vitamins-and-minerals", name: "D-Biotin (Vitamin B7)", cas: "58-85-5", grade: "USP", use: "B-complex" },
-  { category: "vitamins-and-minerals", name: "Folic Acid (Vitamin B9)", cas: "59-30-7", grade: "IP / BP / USP", use: "B-complex" },
+  { category: "vitamins-and-minerals", name: "Folic Acid (Vitamin B9)", cas: "59-30-3", grade: "IP / BP / USP", use: "B-complex" },
   { category: "vitamins-and-minerals", name: "Calcium L-5-Methyltetrahydrofolate", cas: "151533-22-1", grade: "USP", use: "Active folate" },
   { category: "vitamins-and-minerals", name: "Cyanocobalamin (Vitamin B12)", cas: "68-19-9", grade: "IP / BP / USP", use: "B-complex" },
   { category: "vitamins-and-minerals", name: "Methylcobalamin", cas: "13422-55-4", grade: "USP", use: "Active B12" },
