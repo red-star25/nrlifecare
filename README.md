@@ -159,17 +159,32 @@ Still no backend, still no server to maintain.
 
 ## Staging vs production
 
-`NEXT_PUBLIC_SITE_URL` controls which domain a deployment believes it is. It
-feeds canonical tags, the sitemap, Open Graph URLs and `robots.txt`.
+A deployment works out which domain it is on, and only the real domain is
+crawlable. This matters because a staging copy that gets indexed competes with
+the live site for the same search terms and can outrank it.
 
-| Deployment | `NEXT_PUBLIC_SITE_URL` | Crawlable |
-| --- | --- | --- |
-| Production | unset (defaults to `https://www.nrlifecare.com`) | Yes |
-| Staging / preview | the temporary URL, e.g. `https://nrlifecare.vercel.app` | No — `Disallow: /` and `noindex` |
+The domain is resolved in this order:
 
-This matters: a staging copy that gets indexed competes with the real site for
-the same search terms and can outrank it. Set the variable on any deployment
-that is not the final domain, and remove it when the domain is switched over.
+1. `NEXT_PUBLIC_SITE_URL`, if set to something usable
+2. Vercel's own `VERCEL_PROJECT_PRODUCTION_URL` / `VERCEL_URL`
+3. `https://www.nrlifecare.com`
+
+Step 2 is the safety net: **on Vercel you do not have to set anything.** An
+un-configured deployment describes itself as `*.vercel.app`, which is not the
+canonical domain, so it serves `Disallow: /` and `noindex` automatically.
+Attach `nrlifecare.com` as the production domain and it becomes indexable on
+its own, with no variable to remember to delete.
+
+The value is normalised before use — a bare hostname like `nrlifecare.vercel.app`
+gains an `https://`, whitespace and trailing slashes are stripped, and anything
+unparseable logs a warning and falls through to the next option rather than
+failing the build.
+
+To point a local or self-hosted build at a specific domain:
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://staging.example.com npm run build
+```
 
 ## Project structure
 
