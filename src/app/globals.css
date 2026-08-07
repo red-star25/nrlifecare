@@ -1,0 +1,225 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand — built around the N R Life Care logo indigo (#2a176f = brand-800) */
+  --color-ink-950: #0b0620;
+  --color-ink-900: #130b31;
+  --color-ink-800: #1c1244;
+  --color-ink-700: #261959;
+
+  --color-brand-50: #f4f3fc;
+  --color-brand-100: #eae7f9;
+  --color-brand-200: #d5cff3;
+  --color-brand-300: #b3a8e8;
+  --color-brand-400: #8e7cd8;
+  --color-brand-500: #6f57c6;
+  --color-brand-600: #573dae;
+  --color-brand-700: #3f2890;
+  --color-brand-800: #2a176f;
+  --color-brand-900: #231460;
+  --color-brand-950: #150b3c;
+
+  /* Credential gold — used sparingly for trust signals against the indigo */
+  --color-gold-300: #f8d57e;
+  --color-gold-400: #f2bc4b;
+  --color-gold-500: #e5a021;
+
+  /* Cool neutrals tuned to sit under indigo */
+  --color-sand-50: #f9f9fc;
+  --color-sand-100: #f2f2f7;
+  --color-sand-200: #e6e5ef;
+  --color-sand-300: #d2d0e0;
+  --color-sand-400: #a09db8;
+  --color-sand-500: #726f8c;
+  --color-sand-600: #55536b;
+  --color-sand-700: #3d3b50;
+  --color-sand-800: #2a2839;
+
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-code), ui-monospace, monospace;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-drift: drift 18s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -22px, 0) scale(1.06);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-sand-200);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-sand-50);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    letter-spacing: -0.028em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-300);
+    color: var(--color-ink-950);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* Page width container used across every section */
+  .shell {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* Hairline grid used behind dark sections */
+  .grid-lines {
+    background-image: linear-gradient(
+        to right,
+        color-mix(in oklab, white 6%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, white 6%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 64px 64px;
+  }
+
+  .grid-lines-light {
+    background-image: linear-gradient(
+        to right,
+        color-mix(in oklab, var(--color-ink-950) 5%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--color-ink-950) 5%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 56px 56px;
+  }
+
+  /* Soft radial glow used behind hero + CTA blocks */
+  .glow {
+    background: radial-gradient(
+      closest-side,
+      color-mix(in oklab, var(--color-brand-400) 55%, transparent),
+      transparent
+    );
+    filter: blur(60px);
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      100deg,
+      var(--color-brand-200) 0%,
+      var(--color-brand-300) 40%,
+      var(--color-gold-300) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .mask-fade-x {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+  }
+}
+
+@layer utilities {
+  .pt-header {
+    padding-top: 5.5rem;
+  }
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

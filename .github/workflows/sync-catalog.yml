@@ -1,0 +1,61 @@
+name: Sync product catalogue
+
+# Pulls the catalogue from the Google Sheet and commits it if anything changed.
+# Pushing the commit triggers whatever deployment is watching the branch.
+
+on:
+  schedule:
+    # Hourly, on the half hour. GitHub queues cron generously, so treat this
+    # as "within an hour or so" rather than exact.
+    - cron: "30 * * * *"
+  workflow_dispatch: # lets you run it on demand from the Actions tab
+
+concurrency:
+  group: sync-catalog
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Pull catalogue from Google Sheet
+        env:
+          CATALOG_CSV_URL: ${{ secrets.CATALOG_CSV_URL }}
+        run: |
+          if [ -z "$CATALOG_CSV_URL" ]; then
+            echo "::error::CATALOG_CSV_URL secret is not set."
+            exit 1
+          fi
+          npm run catalog:sync
+
+      # A broken sheet must never reach the site, so prove it still builds
+      # before committing anything.
+      - name: Verify the site still builds
+        run: npm run build
+
+      - name: Commit if the catalogue changed
+        run: |
+          if git diff --quiet -- src/data/products.generated.ts; then
+            echo "No catalogue changes."
+            exit 0
+          fi
+
+          COUNT=$(grep -c '^  { category:' src/data/products.generated.ts)
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/products.generated.ts
+          git commit -m "Update product catalogue from sheet (${COUNT} products)"
+          git push
