@@ -9,6 +9,8 @@ export const product = defineType({
     { name: "media", title: "Photo" },
     { name: "homepage", title: "Homepage" },
   ],
+  // Delete lives in the document Actions menu (⋯ next to Publish):
+  // “Delete product”. After deleting, run the catalogue pull so the site updates.
   fields: [
     defineField({
       name: "name",
