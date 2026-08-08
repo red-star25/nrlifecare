@@ -1,14 +1,14 @@
 import { ImageResponse } from "next/og";
 
 import { company } from "@/data/company";
-import { totalProductCount } from "@/data/catalog";
+import { approxProductCountLabel } from "@/data/catalog";
 
 export const alt = `${company.name} — Active Pharmaceutical Ingredients, excipients and specialty chemicals`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function OpengraphImage() {
-  const subline = `${totalProductCount}+ catalogued APIs, excipients, intermediates, vitamins and specialty chemicals — shipped worldwide since ${company.founded}.`;
+  const subline = `${approxProductCountLabel} catalogued APIs, excipients, intermediates, vitamins and specialty chemicals — shipped worldwide since ${company.founded}.`;
 
   return new ImageResponse(
     (
@@ -52,7 +52,7 @@ export default function OpengraphImage() {
                 letterSpacing: 1,
               }}
             >
-              N R LIFE CARE
+              NR LIFE CARE
             </div>
             <div
               style={{
@@ -71,24 +71,24 @@ export default function OpengraphImage() {
           <div
             style={{
               color: "#ffffff",
-              fontSize: 74,
+              fontSize: 64,
               fontWeight: 800,
               lineHeight: 1.05,
               letterSpacing: -2,
             }}
           >
-            Pharmaceutical ingredients,
+            Your global link to
           </div>
           <div
             style={{
-              color: "#d5cff3",
-              fontSize: 74,
+              color: "#7ebfb8",
+              fontSize: 64,
               fontWeight: 800,
               lineHeight: 1.05,
               letterSpacing: -2,
             }}
           >
-            sourced right.
+            trusted pharma APIs.
           </div>
           <div
             style={{

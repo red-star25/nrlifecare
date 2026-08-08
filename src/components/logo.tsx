@@ -26,7 +26,7 @@ export function Logo({
   return (
     <Image
       src={source}
-      alt="N R Life Care — Your Global Link To Trusted Pharma APIs"
+      alt="NR Life Care — Your Global Link To Trusted Pharma APIs"
       width={NATIVE_WIDTH}
       height={NATIVE_HEIGHT}
       priority={priority}

@@ -5,7 +5,7 @@ import { useDeferredValue, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
 import { ArrowRight, Close, Search } from "@/components/icons";
-import { allProducts, categories } from "@/data/catalog";
+import { allProducts, approxProductCountLabel, categories } from "@/data/catalog";
 import { company } from "@/data/company";
 
 const PAGE_SIZE = 48;
@@ -277,9 +277,9 @@ function EmptyState({ query }: { query: string }) {
         No catalogue match for “{query}”
       </h3>
       <p className="mx-auto mt-3 max-w-md text-[14.5px] leading-relaxed text-sand-600">
-        This site lists a working selection of our range. We supply well over a
-        thousand products — if it is a pharmaceutical or industrial raw
-        material, there is a good chance we can source it.
+        This site lists a working selection of our range — {approxProductCountLabel}{" "}
+        online, with more available on request. If it is a pharmaceutical or
+        industrial raw material, there is a good chance we can source it.
       </p>
       <a
         href={`mailto:${company.email}?subject=${subject}`}

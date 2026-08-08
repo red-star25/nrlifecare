@@ -2,7 +2,7 @@
  * One-off importer for the product photography on the company's older
  * TradeIndia-built site.
  *
- * Those images belong to N R Life Care and are already public, but they are
+ * Those images belong to NR Life Care and are already public, but they are
  * served from a vendor CDN. Hotlinking them would leave the new site rendering
  * through infrastructure we do not control, so each is fetched once, converted
  * and committed alongside everything else.

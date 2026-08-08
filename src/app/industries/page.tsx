@@ -10,7 +10,7 @@ import { industries } from "@/data/industries";
 export const metadata: Metadata = {
   title: "Industries We Supply — Pharma, Food, Agro, Coatings & More",
   description:
-    "N R Life Care supplies raw materials to pharmaceutical formulators, nutraceutical brands, food processors, cosmetics manufacturers, feed millers, agrochemical, paint, textile, water treatment and oil & gas customers.",
+    "NR Life Care supplies raw materials to pharmaceutical formulators, nutraceutical brands, food processors, cosmetics manufacturers, feed millers, agrochemical, paint, textile, water treatment and oil & gas customers.",
   alternates: { canonical: "/industries" },
 };
 
@@ -24,47 +24,55 @@ export default function IndustriesPage() {
         crumbs={[{ label: "Industries" }]}
       />
 
-      <section className="shell py-16 md:py-24">
-        <SectionHeading
-          eyebrow="Where our material goes"
-          title="Twelve sectors we supply regularly"
-          lede="Across seventeen broad industry groups, these are the customers we serve week in and week out — each with their own grade requirements, documentation expectations and packing needs."
-        />
+      <section className="relative overflow-hidden border-y border-sand-200/80 bg-white py-16 md:py-24">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-70"
+          aria-hidden="true"
+        >
+          <div className="light-wash--quiet absolute inset-0" />
+        </div>
+        <div className="shell relative">
+          <SectionHeading
+            eyebrow="Where our material goes"
+            title="Twelve sectors we supply regularly"
+            lede="Across seventeen broad industry groups, these are the customers we serve week in and week out — each with their own grade requirements, documentation expectations and packing needs."
+          />
 
-        <Stagger className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {industries.map((industry) => (
-            <StaggerItem key={industry.name}>
-              <article className="group flex h-full flex-col rounded-3xl border border-sand-200 bg-white p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-[0_22px_50px_-30px_rgba(6,35,42,0.4)]">
-                <h3 className="text-[18px] leading-snug font-bold text-ink-900">
-                  {industry.name}
-                </h3>
-                <p className="mt-3 flex-1 text-[14px] leading-relaxed text-sand-600">
-                  {industry.blurb}
-                </p>
-
-                <div className="mt-6 border-t border-sand-100 pt-5">
-                  <p className="text-[11px] font-semibold tracking-[0.14em] text-sand-500 uppercase">
-                    We commonly supply
+          <Stagger className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {industries.map((industry) => (
+              <StaggerItem key={industry.name}>
+                <article className="group flex h-full flex-col rounded-3xl border border-sand-200 bg-white/90 p-7 shadow-[0_12px_40px_-28px_rgba(15,23,42,0.2)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-[0_22px_50px_-30px_rgba(6,35,42,0.4)]">
+                  <h3 className="text-[18px] leading-snug font-bold text-ink-900">
+                    {industry.name}
+                  </h3>
+                  <p className="mt-3 flex-1 text-[14px] leading-relaxed text-sand-600">
+                    {industry.blurb}
                   </p>
-                  <ul className="mt-3 flex flex-wrap gap-1.5">
-                    {industry.supplies.map((supply) => (
-                      <li
-                        key={supply}
-                        className="flex items-center gap-1.5 rounded-full bg-sand-100 px-2.5 py-1 text-[11.5px] font-medium text-sand-700 transition-colors group-hover:bg-brand-50 group-hover:text-brand-800"
-                      >
-                        <Check
-                          className="h-3 w-3 text-brand-600"
-                          aria-hidden="true"
-                        />
-                        {supply}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            </StaggerItem>
-          ))}
-        </Stagger>
+
+                  <div className="mt-6 border-t border-sand-100 pt-5">
+                    <p className="text-[11px] font-semibold tracking-[0.14em] text-sand-500 uppercase">
+                      We commonly supply
+                    </p>
+                    <ul className="mt-3 flex flex-wrap gap-1.5">
+                      {industry.supplies.map((supply) => (
+                        <li
+                          key={supply}
+                          className="flex items-center gap-1.5 rounded-full bg-sand-100 px-2.5 py-1 text-[11.5px] font-medium text-sand-700 transition-colors group-hover:bg-brand-50 group-hover:text-brand-800"
+                        >
+                          <Check
+                            className="h-3 w-3 text-brand-600"
+                            aria-hidden="true"
+                          />
+                          {supply}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </article>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
       </section>
 
       <CtaBand

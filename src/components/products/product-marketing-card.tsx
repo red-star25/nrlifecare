@@ -49,8 +49,8 @@ function DropletIcon({ className }: { className?: string }) {
 
 /**
  * Branded product card used as the default visual for every product.
- * Layout echoes the company's marketing flyers: light clinical surface,
- * indigo type, and trust signals.
+ * Layout echoes the company's marketing flyers: light clinical surface
+ * and trust signals.
  */
 export function ProductMarketingCard({
   name,
@@ -71,19 +71,19 @@ export function ProductMarketingCard({
 
   return (
     <div
-      className={`relative flex w-full flex-col overflow-hidden border border-brand-200/70 bg-white ${
+      className={`relative flex w-full flex-col overflow-hidden border border-brand-200/80 bg-white ${
         isCompact
-          ? "rounded-2xl shadow-[0_14px_36px_-24px_rgba(42,23,111,0.4)]"
-          : "rounded-3xl shadow-[0_20px_50px_-28px_rgba(42,23,111,0.45)]"
+          ? "rounded-2xl shadow-[0_14px_36px_-24px_rgba(15,23,42,0.28)]"
+          : "rounded-3xl shadow-[0_20px_50px_-28px_rgba(15,23,42,0.3)]"
       }`}
       role="img"
       aria-label={`${name} product card`}
     >
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.07]"
+        className="pointer-events-none absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 1px 1px, #2a176f 1px, transparent 0)",
+            "radial-gradient(circle at 1px 1px, #0f6b63 1px, transparent 0)",
           backgroundSize: "18px 18px",
         }}
         aria-hidden="true"

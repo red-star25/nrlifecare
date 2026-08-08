@@ -144,7 +144,7 @@ export async function POST(request: Request) {
   try {
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
-      from: process.env.ENQUIRY_FROM || "N R Life Care <onboarding@resend.dev>",
+      from: process.env.ENQUIRY_FROM || "NR Life Care <onboarding@resend.dev>",
       to: process.env.ENQUIRY_TO || company.email,
       replyTo: email,
       subject: `Enquiry: ${product} — ${name}${

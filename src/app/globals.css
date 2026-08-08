@@ -2,41 +2,39 @@
 
 @theme {
   /*
-   * Brand — same indigo family as the logo, lifted so dark sections read as
-   * rich purple-blue rather than near-black. Logo artwork is unchanged.
+   * Light-first B2B palette: cool slate ink + teal accent.
+   * Not tied to the logo indigo — prioritises readability and calm polish.
    */
-  --color-ink-950: #1e1654;
-  --color-ink-900: #2a1f6b;
-  --color-ink-800: #352a7a;
-  --color-ink-700: #42368a;
+  --color-ink-950: #0b1220;
+  --color-ink-900: #142033;
+  --color-ink-800: #1e2d45;
+  --color-ink-700: #334155;
 
-  --color-brand-50: #f5f4fd;
-  --color-brand-100: #ebe9fb;
-  --color-brand-200: #d8d3f5;
-  --color-brand-300: #b8afe9;
-  --color-brand-400: #9586db;
-  --color-brand-500: #7463c9;
-  --color-brand-600: #5b45c0;
-  --color-brand-700: #4a35a8;
-  --color-brand-800: #3b278f;
-  --color-brand-900: #2a176f;
-  --color-brand-950: #1e1258;
+  --color-brand-50: #f0f7f6;
+  --color-brand-100: #d9edeb;
+  --color-brand-200: #b3dad6;
+  --color-brand-300: #7ebfb8;
+  --color-brand-400: #4a9e95;
+  --color-brand-500: #2f7f77;
+  --color-brand-600: #0f6b63;
+  --color-brand-700: #0d5650;
+  --color-brand-800: #0c4541;
+  --color-brand-900: #0a3532;
+  --color-brand-950: #072624;
 
-  /* Credential gold — used sparingly for trust signals against the indigo */
-  --color-gold-300: #f8d57e;
-  --color-gold-400: #f2bc4b;
-  --color-gold-500: #e5a021;
+  --color-gold-300: #e8c56a;
+  --color-gold-400: #d4a93a;
+  --color-gold-500: #b8891f;
 
-  /* Cool neutrals tuned to sit under indigo */
-  --color-sand-50: #f9f9fc;
-  --color-sand-100: #f2f2f7;
-  --color-sand-200: #e6e5ef;
-  --color-sand-300: #d2d0e0;
-  --color-sand-400: #a09db8;
-  --color-sand-500: #726f8c;
-  --color-sand-600: #55536b;
-  --color-sand-700: #3d3b50;
-  --color-sand-800: #2a2839;
+  --color-sand-50: #f7f8fa;
+  --color-sand-100: #eef0f4;
+  --color-sand-200: #e1e5ec;
+  --color-sand-300: #c8ceda;
+  --color-sand-400: #94a0b4;
+  --color-sand-500: #64748b;
+  --color-sand-600: #475569;
+  --color-sand-700: #334155;
+  --color-sand-800: #1e293b;
 
   --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -147,51 +145,109 @@
     text-transform: uppercase;
   }
 
-  /* Hairline grid used behind dark sections */
+  /* Soft daylight wash for light heroes */
+  .light-wash {
+    background:
+      radial-gradient(
+        ellipse 85% 55% at 8% -5%,
+        color-mix(in oklab, var(--color-brand-200) 55%, transparent),
+        transparent 58%
+      ),
+      radial-gradient(
+        ellipse 60% 45% at 95% 10%,
+        color-mix(in oklab, #bae6fd 55%, transparent),
+        transparent 52%
+      ),
+      linear-gradient(180deg, #f4f7f9 0%, #eef2f6 42%, #f7f8fa 100%);
+  }
+
+  .light-wash--quiet {
+    background:
+      radial-gradient(
+        ellipse 70% 50% at 0% 0%,
+        color-mix(in oklab, var(--color-brand-100) 70%, transparent),
+        transparent 55%
+      ),
+      linear-gradient(180deg, #f5f7fa 0%, #f7f8fa 100%);
+  }
+
+  /* Richer wash for Industries / Quality / About / Contact heroes */
+  .light-wash--page {
+    background:
+      radial-gradient(
+        ellipse 95% 75% at -5% -15%,
+        color-mix(in oklab, var(--color-brand-200) 70%, transparent),
+        transparent 58%
+      ),
+      radial-gradient(
+        ellipse 80% 65% at 105% 0%,
+        color-mix(in oklab, #bae6fd 65%, transparent),
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse 55% 45% at 55% 110%,
+        color-mix(in oklab, var(--color-brand-100) 80%, transparent),
+        transparent 60%
+      ),
+      linear-gradient(165deg, #eaf3f2 0%, #eef3f7 42%, #f7f8fa 100%);
+  }
+
+  .page-mesh {
+    background-image:
+      radial-gradient(
+        circle at 1px 1px,
+        color-mix(in oklab, var(--color-brand-700) 10%, transparent) 1px,
+        transparent 0
+      );
+    background-size: 28px 28px;
+    mask-image: linear-gradient(180deg, black 20%, transparent 92%);
+  }
+
+  /* Kept for footer / occasional deep bands */
+  .dark-wash {
+    background:
+      radial-gradient(
+        ellipse 90% 70% at 12% -10%,
+        color-mix(in oklab, var(--color-brand-800) 28%, transparent),
+        transparent 58%
+      ),
+      linear-gradient(165deg, #0b1220 0%, #142033 50%, #0e1726 100%);
+  }
+
   .grid-lines {
     background-image: linear-gradient(
         to right,
-        color-mix(in oklab, white 6%, transparent) 1px,
+        color-mix(in oklab, white 4%, transparent) 1px,
         transparent 1px
       ),
       linear-gradient(
         to bottom,
-        color-mix(in oklab, white 6%, transparent) 1px,
+        color-mix(in oklab, white 4%, transparent) 1px,
         transparent 1px
       );
-    background-size: 64px 64px;
+    background-size: 72px 72px;
   }
 
   .grid-lines-light {
     background-image: linear-gradient(
         to right,
-        color-mix(in oklab, var(--color-ink-950) 5%, transparent) 1px,
+        color-mix(in oklab, var(--color-ink-950) 4.5%, transparent) 1px,
         transparent 1px
       ),
       linear-gradient(
         to bottom,
-        color-mix(in oklab, var(--color-ink-950) 5%, transparent) 1px,
+        color-mix(in oklab, var(--color-ink-950) 4.5%, transparent) 1px,
         transparent 1px
       );
     background-size: 56px 56px;
   }
 
-  /* Soft radial glow used behind hero + CTA blocks */
-  .glow {
-    background: radial-gradient(
-      closest-side,
-      color-mix(in oklab, var(--color-brand-400) 55%, transparent),
-      transparent
-    );
-    filter: blur(60px);
-  }
-
   .text-gradient {
     background: linear-gradient(
-      100deg,
-      var(--color-brand-200) 0%,
-      var(--color-brand-300) 40%,
-      var(--color-gold-300) 100%
+      105deg,
+      var(--color-brand-700) 0%,
+      var(--color-brand-500) 48%,
+      #1d6a8a 100%
     );
     -webkit-background-clip: text;
     background-clip: text;

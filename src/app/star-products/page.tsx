@@ -14,7 +14,7 @@ import { STAR_PRODUCT_NAMES } from "@/data/star-products";
 export const metadata: Metadata = {
   title: "Star Products — Priority APIs & Chemicals",
   description:
-    "N R Life Care’s star product list — the APIs, steroid actives, antibiotics and specialty chemicals buyers ask for most. Request a quotation from Ahmedabad.",
+    "NR Life Care’s star product list — the APIs, steroid actives, antibiotics and specialty chemicals buyers ask for most. Request a quotation from Ahmedabad.",
   alternates: { canonical: "/star-products" },
 };
 
@@ -43,7 +43,7 @@ export default function StarProductsPage() {
             Request a quotation
             <ArrowRight className="h-4 w-4" />
           </ButtonLink>
-          <ButtonLink href="/products" variant="onDark" size="lg">
+          <ButtonLink href="/products" variant="secondary" size="lg">
             Search full catalogue
           </ButtonLink>
         </div>

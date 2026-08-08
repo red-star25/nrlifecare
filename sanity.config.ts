@@ -10,7 +10,7 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
 
 export default defineConfig({
   name: "nrlifecare",
-  title: "N R Life Care",
+  title: "NR Life Care",
   projectId: projectId || "placeholder",
   dataset,
   basePath: "/studio",

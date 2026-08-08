@@ -18,7 +18,7 @@ import {
 export const metadata: Metadata = {
   title: "About Us — Pharmaceutical Ingredient Suppliers Since 2014",
   description:
-    "N R Life Care was founded in Ahmedabad in 2014 by Jitendra Nakum, backed by over 30 years in India's bulk drug trade. Learn how we source APIs, excipients and specialty chemicals for manufacturers worldwide.",
+    "NR Life Care was founded in Ahmedabad in 2014 by Jitendra Nakum, backed by over 30 years in India's bulk drug trade. Learn how we source APIs, excipients and specialty chemicals for manufacturers worldwide.",
   alternates: { canonical: "/about" },
 };
 
@@ -26,14 +26,21 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        eyebrow="About N R Life Care"
+        eyebrow="About NR Life Care"
         title="Thirty years of relationships, distilled into one supply desk"
         lede="We are a proprietorship in Ahmedabad that buys pharmaceutical and industrial raw materials well, and sells them honestly. That is the entire business model, and it has kept customers for a decade."
         crumbs={[{ label: "About" }]}
       />
 
       {/* Story */}
-      <section className="shell py-16 md:py-24">
+      <section className="relative overflow-hidden border-y border-sand-200/80 bg-white py-16 md:py-24">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-70"
+          aria-hidden="true"
+        >
+          <div className="light-wash--quiet absolute inset-0" />
+        </div>
+        <div className="shell relative">
         <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <div>
             <SectionHeading
@@ -62,8 +69,8 @@ export default function AboutPage() {
                 nutraceutical actives, food-grade ingredients and industrial
                 chemicals — largely because customers kept asking. A formulator
                 who trusts you with the active molecule would rather buy the
-                magnesium stearate from you too. Today the catalogue runs past a
-                thousand line items across seventeen industries, and the firm
+                magnesium stearate from you too. Today the catalogue runs to
+                800+ line items across seventeen industries, and the firm
                 exports to buyers well beyond India.
               </p>
               <p className="text-[16px] leading-relaxed text-sand-700">
@@ -76,34 +83,27 @@ export default function AboutPage() {
 
           {/* Owner card */}
           <Reveal delay={0.12}>
-            <div className="sticky top-28 overflow-hidden rounded-4xl border border-sand-200 bg-white">
-              <div className="relative overflow-hidden bg-ink-950 px-7 py-10">
-                <div className="grid-lines pointer-events-none absolute inset-0 opacity-50" />
-                <div
-                  className="glow pointer-events-none absolute -top-16 -right-10 h-56 w-56 opacity-25"
-                  aria-hidden="true"
-                />
-                <div className="relative">
-                  <div className="overflow-hidden rounded-3xl ring-1 ring-white/12">
-                    <Image
-                      src="/jitendra-nakum.png"
-                      alt={`${company.proprietor}, ${company.proprietorRole} of ${company.name}`}
-                      width={296}
-                      height={389}
-                      className="h-auto w-full"
-                      sizes="(min-width: 1024px) 320px, 100vw"
-                    />
-                  </div>
-                  <p className="mt-6 font-display text-[21px] font-bold text-white">
-                    {company.proprietor}
-                  </p>
-                  <p className="mt-1 text-[13.5px] text-brand-300">
-                    {company.proprietorRole}
-                  </p>
-                  <p className="mt-5 text-[14px] leading-relaxed text-sand-400">
-                    &ldquo;{proprietorMessage[1]}&rdquo;
-                  </p>
+            <div className="sticky top-28 overflow-hidden rounded-4xl border border-sand-200 bg-white shadow-[0_18px_50px_-36px_rgba(15,23,42,0.28)]">
+              <div className="bg-brand-50 px-7 py-10">
+                <div className="overflow-hidden rounded-3xl ring-1 ring-brand-100">
+                  <Image
+                    src="/jitendra-nakum.png"
+                    alt={`${company.proprietor}, ${company.proprietorRole} of ${company.name}`}
+                    width={296}
+                    height={389}
+                    className="h-auto w-full"
+                    sizes="(min-width: 1024px) 320px, 100vw"
+                  />
                 </div>
+                <p className="mt-6 font-display text-[21px] font-bold text-ink-900">
+                  {company.proprietor}
+                </p>
+                <p className="mt-1 text-[13.5px] font-medium text-brand-700">
+                  {company.proprietorRole}
+                </p>
+                <p className="mt-5 text-[14px] leading-relaxed text-sand-600">
+                  &ldquo;{proprietorMessage[1]}&rdquo;
+                </p>
               </div>
 
               <div className="space-y-4 p-7">
@@ -133,6 +133,7 @@ export default function AboutPage() {
               </div>
             </div>
           </Reveal>
+        </div>
         </div>
       </section>
 

@@ -12,7 +12,11 @@ import { ButtonLink } from "@/components/ui/button";
 import { ArrowRight, Check, Document, Globe, Shield } from "@/components/icons";
 import { differentiators, process, stats } from "@/data/company";
 import { industries } from "@/data/industries";
-import { categories, totalProductCount } from "@/data/catalog";
+import {
+  approxProductCountLabel,
+  categories,
+  getStarShowcase,
+} from "@/data/catalog";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -36,10 +40,17 @@ const assurances = [
   },
 ];
 
+const heroStars = getStarShowcase(5).map((product) => ({
+  name: product.name,
+  cas: product.cas,
+  grade: product.grade,
+  href: product.href,
+}));
+
 export default function HomePage() {
   return (
     <>
-      <Hero />
+      <Hero showcase={heroStars} />
       <IndustryMarquee />
 
       {/* Stats */}
@@ -76,7 +87,7 @@ export default function HomePage() {
                   {categories.filter((c) => c.products.length > 0).length}{" "}
                   categories.
                   <br />
-                  {totalProductCount} listed online.
+                  {approxProductCountLabel} listed online.
                 </>
               }
               lede="From the active molecule to the excipient that carries it, the intermediate that builds it and the chemical that cleans the vessel afterwards — catalogued with CAS numbers and pharmacopoeial grades so your procurement team can specify precisely."
@@ -100,7 +111,7 @@ export default function HomePage() {
         <SectionHeading
           eyebrow="Why buyers stay"
           title="Trading companies are easy to find. Ones that hold their word are not."
-          lede="N R Life Care was built by someone who spent thirty years watching formulators get let down by vague specifications and quotes that moved after the order was placed. We run the opposite way."
+          lede="NR Life Care was built by someone who spent thirty years watching formulators get let down by vague specifications and quotes that moved after the order was placed. We run the opposite way."
         />
 
         <Stagger className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">

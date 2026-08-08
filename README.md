@@ -1,6 +1,6 @@
-# N R Life Care — Website
+# NR Life Care — Website
 
-The official website for **N R Life Care**, an Ahmedabad-based manufacturer, importer, exporter and wholesale supplier of Active Pharmaceutical Ingredients, pharmaceutical excipients, intermediates, vitamins, nutraceutical actives and specialty chemicals.
+The official website for **NR Life Care**, an Ahmedabad-based manufacturer, importer, exporter and wholesale supplier of Active Pharmaceutical Ingredients, pharmaceutical excipients, intermediates, vitamins, nutraceutical actives and specialty chemicals.
 
 Built as a fully independent site — no marketplace lock-in, no Indiamart or TradeIndia dependency.
 
@@ -228,7 +228,7 @@ Three environment variables, all set in the host's dashboard:
 
 Resend's free tier covers 3,000 emails a month, which is far beyond what this site will generate.
 
-Until a domain is verified in Resend, the shared `onboarding@resend.dev` sender only delivers to the address that owns the Resend account. **For enquiries to reach `info@nrlifecare.com`, verify `nrlifecare.com` in Resend and set `ENQUIRY_FROM` to something like `N R Life Care <enquiries@nrlifecare.com>`.** That also stops the mail landing in spam, since it will then be SPF- and DKIM-signed.
+Until a domain is verified in Resend, the shared `onboarding@resend.dev` sender only delivers to the address that owns the Resend account. **For enquiries to reach `info@nrlifecare.com`, verify `nrlifecare.com` in Resend and set `ENQUIRY_FROM` to something like `NR Life Care <enquiries@nrlifecare.com>`.** That also stops the mail landing in spam, since it will then be SPF- and DKIM-signed.
 
 ### Behaviour when it cannot send
 
@@ -272,4 +272,4 @@ Skip-to-content link, visible focus rings, semantic landmarks, labelled form fie
 
 ## A note on claims
 
-Product listings, grades and company details were compiled from N R Life Care's existing published material. The site deliberately avoids claiming manufacturing certifications (WHO-GMP, ISO, USFDA) that belong to partner manufacturing plants rather than to the firm — see the "What we do not claim" section on `/quality`. Review all product data with the business before publishing, and keep CAS numbers and pharmacopoeial grades verified against current supplier documentation.
+Product listings, grades and company details were compiled from NR Life Care's existing published material. The site deliberately avoids claiming manufacturing certifications (WHO-GMP, ISO, USFDA) that belong to partner manufacturing plants rather than to the firm — see the "What we do not claim" section on `/quality`. Review all product data with the business before publishing, and keep CAS numbers and pharmacopoeial grades verified against current supplier documentation.

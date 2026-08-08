@@ -2,9 +2,9 @@
  * Star products — ordered from the proprietor’s list
  * (“STAR PRODUCTS OF NR LIFE CARE.docx”).
  *
- * This list drives the homepage featured strip and /star-products.
- * It is independent of Sanity’s “Show on homepage” checkbox so a
- * cms:pull cannot wipe dad’s priority ranking.
+ * Drives the homepage hero panel and /star-products.
+ * Independent of Sanity’s “Show on homepage” checkbox (that powers
+ * the homepage featured grid further down the page).
  */
 
 export const STAR_PRODUCT_NAMES = [

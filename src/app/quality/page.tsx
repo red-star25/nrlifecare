@@ -11,7 +11,7 @@ import { company, process, qualityCommitments } from "@/data/company";
 export const metadata: Metadata = {
   title: "Quality & Compliance — CoA, MSDS and Pharmacopoeial Grades",
   description:
-    "How N R Life Care assures quality: batch-specific Certificates of Analysis, MSDS with every shipment, IP/BP/USP/EP pharmacopoeial grades, supplier qualification and protective packing. Drug Licence holder, GST 24ADVPN9611L2ZU.",
+    "How NR Life Care assures quality: batch-specific Certificates of Analysis, MSDS with every shipment, IP/BP/USP/EP pharmacopoeial grades, supplier qualification and protective packing. Drug Licence holder, GST 24ADVPN9611L2ZU.",
   alternates: { canonical: "/quality" },
 };
 
@@ -68,7 +68,14 @@ export default function QualityPage() {
       />
 
       {/* Registrations & certifications */}
-      <section className="shell py-16 md:py-24">
+      <section className="relative overflow-hidden border-y border-sand-200/80 bg-white py-16 md:py-24">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-70"
+          aria-hidden="true"
+        >
+          <div className="light-wash--quiet absolute inset-0" />
+        </div>
+        <div className="shell relative">
         <SectionHeading
           eyebrow="Registrations & certifications"
           title="Licensed, certified, and happy to prove it"
@@ -104,6 +111,7 @@ export default function QualityPage() {
             registered in Gujarat, India.
           </p>
         </Reveal>
+        </div>
       </section>
 
       {/* Commitments */}

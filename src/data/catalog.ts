@@ -101,7 +101,21 @@ export const allProducts = categories.flatMap((category) =>
 
 export type CatalogProduct = (typeof allProducts)[number];
 
+/** Exact length — prefer `approxProductCountLabel` in UI copy. */
 export const totalProductCount = allProducts.length;
+
+/**
+ * Rounded-down display count, e.g. 850 → "800+".
+ * Keeps marketing copy from tracking every catalogue edit.
+ */
+export function approxCountLabel(count: number, step = 100): string {
+  if (count <= 0) return "0";
+  const floored = Math.floor(count / step) * step;
+  if (floored < step) return `${step}+`;
+  return `${floored}+`;
+}
+
+export const approxProductCountLabel = approxCountLabel(totalProductCount);
 
 export function getCategory(slug: string) {
   return categories.find((category) => category.slug === slug);
@@ -208,21 +222,43 @@ export function getStarCatalogue(): StarCatalogueEntry[] {
 }
 
 /**
- * Homepage lead products — top of dad’s star list that resolve in the catalogue.
+ * Star products for the homepage hero panel (dad’s priority list).
  */
-export function getFeaturedProducts(limit = HOMEPAGE_STAR_COUNT) {
-  const fromStars = getStarCatalogue()
-    .filter((entry): entry is StarCatalogueEntry & { product: CatalogProduct } =>
-      Boolean(entry.product),
+export function getStarShowcase(limit = 5): CatalogProduct[] {
+  return getStarCatalogue()
+    .filter(
+      (entry): entry is StarCatalogueEntry & { product: CatalogProduct } =>
+        Boolean(entry.product),
     )
     .map((entry) => entry.product)
     .slice(0, limit);
+}
 
-  if (fromStars.length > 0) return fromStars;
+/**
+ * Homepage grid — products with Sanity “Show on homepage” (`featured`).
+ * Order comes from `featuredOrder` (lower first), then name.
+ * Falls back to the star list until any CMS flags are present in the
+ * committed catalogue (after a Studio toggle + `cms:pull`).
+ */
+export function getFeaturedProducts(limit = 12): CatalogProduct[] {
+  const fromCms = allProducts
+    .filter((product) => product.featured)
+    .sort((a, b) => {
+      const orderA = a.featuredOrder ?? Number.POSITIVE_INFINITY;
+      const orderB = b.featuredOrder ?? Number.POSITIVE_INFINITY;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.name.localeCompare(b.name);
+    })
+    .slice(0, limit);
 
-  // Fallback if the star list somehow matches nothing.
-  const candidates = allProducts.filter((product) => hasDistinctPhoto(product));
-  return candidates.slice(0, limit);
+  if (fromCms.length > 0) return fromCms;
+
+  return getStarShowcase(Math.min(limit, HOMEPAGE_STAR_COUNT));
+}
+
+/** True when at least one catalogue row has Sanity’s homepage flag. */
+export function hasCmsHomepageFeatured() {
+  return allProducts.some((product) => product.featured);
 }
 
 /** Other products in the same category, for cross-linking. */

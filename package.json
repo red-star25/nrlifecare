@@ -2,7 +2,7 @@
   "name": "nrlifecare",
   "version": "1.0.0",
   "private": true,
-  "description": "Official website for N R Life Care - APIs, excipients, intermediates and specialty chemicals.",
+  "description": "Official website for NR Life Care - APIs, excipients, intermediates and specialty chemicals.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,6 +12,7 @@
     "catalog:export": "node --experimental-strip-types --no-warnings scripts/export-catalog-csv.mjs",
     "catalog:import-pdf": "node --experimental-strip-types --no-warnings scripts/import-pdf-catalogue.mjs",
     "catalog:dedupe": "node --experimental-strip-types --no-warnings scripts/dedupe-catalog.mjs",
+    "catalog:fill-cas": "node --experimental-strip-types --no-warnings scripts/fill-cas-numbers.mjs",
     "images:import": "node --experimental-strip-types --no-warnings scripts/import-legacy-images.mjs",
     "cms:push": "node --experimental-strip-types --no-warnings scripts/cms-push.mjs",
     "cms:pull": "node --experimental-strip-types --no-warnings scripts/cms-pull.mjs"

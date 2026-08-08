@@ -34,11 +34,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default:
-      "N R Life Care | API, Excipient & Specialty Chemical Supplier in Ahmedabad",
-    template: "%s | N R Life Care",
+      "NR Life Care | API, Excipient & Specialty Chemical Supplier in Ahmedabad",
+    template: "%s | NR Life Care",
   },
   description:
-    "N R Life Care supplies Active Pharmaceutical Ingredients, pharmaceutical excipients, intermediates, vitamins, nutraceutical actives and specialty chemicals from Ahmedabad, Gujarat. 1000+ products with CoA and MSDS on every consignment.",
+    "NR Life Care supplies Active Pharmaceutical Ingredients, pharmaceutical excipients, intermediates, vitamins, nutraceutical actives and specialty chemicals from Ahmedabad, Gujarat. 800+ products with CoA and MSDS on every consignment.",
   keywords: [
     "API manufacturer India",
     "Active Pharmaceutical Ingredients supplier",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     "nutraceutical ingredients supplier",
     "specialty chemicals Ahmedabad",
     "caffeine anhydrous supplier",
-    "N R Life Care",
+    "NR Life Care",
   ],
   authors: [{ name: company.name }],
   creator: company.name,
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: company.name,
     title:
-      "N R Life Care | API, Excipient & Specialty Chemical Supplier in Ahmedabad",
+      "NR Life Care | API, Excipient & Specialty Chemical Supplier in Ahmedabad",
     description:
       "Active Pharmaceutical Ingredients, excipients, intermediates, vitamins and specialty chemicals — supplied from Ahmedabad to formulators worldwide.",
     images: [
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "N R Life Care | Pharmaceutical Ingredients, Sourced Right",
+    title: "NR Life Care | Pharmaceutical Ingredients, Sourced Right",
     description:
       "APIs, excipients, intermediates, nutraceuticals and specialty chemicals from Ahmedabad, Gujarat.",
     images: ["/opengraph-image"],
@@ -99,7 +99,7 @@ const organizationSchema = {
   "@type": "Organization",
   "@id": `${SITE_URL}/#organization`,
   name: company.name,
-  alternateName: "NR Lifecare",
+  alternateName: "NR Life Care",
   url: SITE_URL,
   logo: `${SITE_URL}/icon.svg`,
   description:

@@ -28,7 +28,7 @@ export function WhatsAppFab() {
           exit={{ opacity: 0, scale: 0.7, y: 16 }}
           transition={{ duration: 0.28, ease: "easeOut" }}
           className="group fixed right-5 bottom-5 z-40 flex h-14 items-center gap-3 rounded-full bg-[#25D366] pr-5 pl-4 text-white shadow-[0_16px_40px_-12px_rgba(37,211,102,0.75)] transition-all hover:bg-[#1eb955] md:right-7 md:bottom-7"
-          aria-label="Chat with N R Life Care on WhatsApp"
+          aria-label="Chat with NR Life Care on WhatsApp"
         >
           <WhatsApp className="h-6 w-6 shrink-0" />
           <span className="hidden text-[14px] font-semibold sm:inline">

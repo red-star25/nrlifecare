@@ -140,7 +140,7 @@ export function EnquiryForm() {
 
   const sendOnWhatsApp = () => {
     const text = encodeURIComponent(
-      `Hello N R Life Care, I would like a quotation.\n\n${composeBody()}`,
+      `Hello NR Life Care, I would like a quotation.\n\n${composeBody()}`,
     );
     window.open(`${company.whatsappHref}?text=${text}`, "_blank", "noopener");
   };

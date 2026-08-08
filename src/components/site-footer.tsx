@@ -18,8 +18,7 @@ const siteLinks = [
 export function SiteFooter() {
   return (
     <footer className="relative overflow-hidden bg-ink-950 text-sand-300">
-      <div className="grid-lines pointer-events-none absolute inset-0 opacity-[0.45]" />
-      <div className="glow pointer-events-none absolute -top-32 left-1/4 h-72 w-72 opacity-20" />
+      <div className="dark-wash pointer-events-none absolute inset-0" aria-hidden="true" />
 
       <div className="shell relative py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.35fr_1fr_1fr_1.15fr]">

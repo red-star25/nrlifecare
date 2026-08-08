@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { MolecularBackdrop } from "@/components/molecular-backdrop";
+import { LightAtmosphere } from "@/components/light-atmosphere";
 import { Reveal } from "@/components/ui/reveal";
 
 type Crumb = { label: string; href?: string };
@@ -22,13 +22,19 @@ export function PageHero({
   children,
 }: PageHeroProps) {
   return (
-    <section className="relative isolate overflow-hidden bg-ink-950 pt-[118px] pb-16 md:pt-[142px] md:pb-20">
-      <div className="grid-lines pointer-events-none absolute inset-0 opacity-50" />
-      <MolecularBackdrop className="opacity-50" />
+    <section className="relative isolate overflow-hidden bg-sand-50 pt-[118px] pb-16 md:pt-[142px] md:pb-24">
+      <LightAtmosphere variant="page" />
+
+      {/* Soft brand mark — atmosphere, not a card */}
       <div
-        className="glow pointer-events-none absolute -top-32 left-1/3 h-[380px] w-[380px] opacity-20"
+        className="pointer-events-none absolute top-[28%] right-[4%] hidden h-[22rem] w-[22rem] lg:block"
         aria-hidden="true"
-      />
+      >
+        <div className="absolute inset-0 rounded-full border border-brand-200/50" />
+        <div className="absolute inset-8 rounded-full border border-brand-200/35" />
+        <div className="absolute inset-16 rounded-full border border-sky-200/40" />
+        <div className="absolute inset-[5.5rem] rounded-full bg-gradient-to-br from-brand-100/80 via-white/40 to-sky-100/60 blur-sm" />
+      </div>
 
       <div className="shell relative">
         {crumbs.length ? (
@@ -37,7 +43,7 @@ export function PageHero({
               <li>
                 <Link
                   href="/"
-                  className="transition-colors hover:text-brand-300"
+                  className="transition-colors hover:text-brand-700"
                 >
                   Home
                 </Link>
@@ -48,12 +54,12 @@ export function PageHero({
                   {crumb.href ? (
                     <Link
                       href={crumb.href}
-                      className="transition-colors hover:text-brand-300"
+                      className="transition-colors hover:text-brand-700"
                     >
                       {crumb.label}
                     </Link>
                   ) : (
-                    <span className="text-sand-300">{crumb.label}</span>
+                    <span className="text-ink-800">{crumb.label}</span>
                   )}
                 </li>
               ))}
@@ -62,14 +68,14 @@ export function PageHero({
         ) : null}
 
         <Reveal>
-          <p className="eyebrow text-brand-300">
-            <span className="h-px w-6 bg-brand-300/60" aria-hidden="true" />
+          <p className="eyebrow text-brand-700">
+            <span className="h-px w-6 bg-brand-500/70" aria-hidden="true" />
             {eyebrow}
           </p>
-          <h1 className="mt-5 max-w-4xl text-[clamp(2.1rem,5vw,3.6rem)] leading-[1.03] font-extrabold text-white">
+          <h1 className="mt-5 max-w-4xl text-[clamp(2.1rem,5vw,3.6rem)] leading-[1.03] font-extrabold text-ink-900">
             {title}
           </h1>
-          <p className="mt-6 max-w-2xl text-[17px] leading-relaxed text-sand-300/85">
+          <p className="mt-6 max-w-2xl text-[17px] leading-relaxed text-sand-600">
             {lede}
           </p>
         </Reveal>

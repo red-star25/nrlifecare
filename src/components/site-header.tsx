@@ -63,28 +63,24 @@ export function SiteHeader() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  // Every page opens on a dark hero, so the untouched header sits on dark and
-  // has to invert once the light page background scrolls up behind it.
-  const onDark = !scrolled && !menuOpen;
-
+  // Site heroes are light; keep the header in the light treatment always,
+  // and strengthen the bar once the page scrolls.
   const navLinkClass = (href: string) => {
-    if (isActive(href)) return onDark ? "text-brand-300" : "text-brand-700";
-    return onDark
-      ? "text-sand-300 hover:text-white"
-      : "text-sand-700 hover:text-ink-900";
+    if (isActive(href)) return "text-brand-700";
+    return "text-sand-700 hover:text-ink-900";
   };
 
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
         scrolled || menuOpen
-          ? "border-b border-sand-200/80 bg-sand-50/85 backdrop-blur-xl"
-          : "border-b border-transparent"
+          ? "border-b border-sand-200/80 bg-white/90 backdrop-blur-xl"
+          : "border-b border-transparent bg-sand-50/70 backdrop-blur-md"
       }`}
     >
       <div className="shell flex h-[72px] items-center justify-between gap-6">
         <Link href="/" aria-label={`${company.name} — home`} className="shrink-0">
-          <Logo variant={onDark ? "light" : "dark"} priority />
+          <Logo variant="dark" priority />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
@@ -200,15 +196,9 @@ export function SiteHeader() {
         <div className="hidden items-center gap-3 lg:flex">
           <a
             href={`tel:${company.phonePrimaryHref}`}
-            className={`flex items-center gap-2 text-[14px] font-semibold transition-colors ${
-              onDark
-                ? "text-white hover:text-brand-300"
-                : "text-ink-900 hover:text-brand-700"
-            }`}
+            className="flex items-center gap-2 text-[14px] font-semibold text-ink-900 transition-colors hover:text-brand-700"
           >
-            <Phone
-              className={`h-4 w-4 ${onDark ? "text-brand-400" : "text-brand-600"}`}
-            />
+            <Phone className="h-4 w-4 text-brand-600" />
             {company.phonePrimary}
           </a>
           <ButtonLink href="/contact">
@@ -222,11 +212,7 @@ export function SiteHeader() {
           onClick={() => setMenuOpen((open) => !open)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
-          className={`flex h-11 w-11 items-center justify-center rounded-full ring-1 transition-colors lg:hidden ${
-            onDark
-              ? "text-white ring-white/25 hover:bg-white/10"
-              : "text-ink-900 ring-sand-300 hover:bg-white"
-          }`}
+          className="flex h-11 w-11 items-center justify-center rounded-full text-ink-900 ring-1 ring-sand-300 transition-colors hover:bg-white lg:hidden"
         >
           {menuOpen ? (
             <Close className="h-5 w-5" />

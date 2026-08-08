@@ -1,14 +1,14 @@
 export { CANONICAL_SITE_URL, IS_CANONICAL_HOST, SITE_URL } from "./site";
 
 export const company = {
-  name: "N R Life Care",
-  legalName: "N R Life Care",
+  name: "NR Life Care",
+  legalName: "NR Life Care",
   shortName: "NR Life Care",
-  tagline: "Pharmaceutical ingredients, sourced right.",
+  tagline: "Your global link to trusted pharma APIs.",
   /** The registered tagline that appears in the company logo. */
   officialTagline: "Your Global Link To Trusted Pharma APIs",
   proposition:
-    "A single, accountable supply partner for Active Pharmaceutical Ingredients, excipients, intermediates and specialty chemicals — shipped from Ahmedabad to formulators worldwide.",
+    "A single, accountable supply partner for Active Pharmaceutical Ingredients, excipients, vitamins and specialty chemicals — shipped from Ahmedabad to formulators worldwide.",
   founded: 2014,
   experienceYears: 30,
   proprietor: "Jitendra Nakum",
@@ -78,7 +78,7 @@ export const credentials = [
     number: "24ADVPN9611L2ZU",
     issuer: "Government of India",
     detail:
-      "Regular GST registration for N R Life Care, Ahmedabad, Gujarat.",
+      "Regular GST registration for NR Life Care, Ahmedabad, Gujarat.",
     validity: "Effective 31 May 2019 · no expiry",
     document: "/documents/gst-registration-certificate.pdf",
   },
@@ -87,7 +87,7 @@ export const credentials = [
     number: "5935859",
     issuer: "Trade Marks Registry, Government of India",
     detail:
-      "N R Life Care registered in Class 5 — pharmaceutical, veterinary and sanitary preparations, and chemicals for pharmaceutical use.",
+      "NR Life Care registered in Class 5 — pharmaceutical, veterinary and sanitary preparations, and chemicals for pharmaceutical use.",
     validity: "Registered 13 May 2023 · 10-year term",
     document: "/documents/trademark-certificate.pdf",
   },
@@ -122,7 +122,7 @@ export const catalogueDownloads = [
 
 /** Verbatim from the Managing Director's message on the company's own site. */
 export const proprietorMessage = [
-  "At NR Lifecare, we are committed to excellence in trading and exporting high-quality Active Pharmaceutical Ingredients, food raw materials, chemicals, excipients, and agrochemical products. Our mission is to build lasting partnerships based on trust, quality, and reliability.",
+  "At NR Life Care, we are committed to excellence in trading and exporting high-quality Active Pharmaceutical Ingredients, food raw materials, chemicals, excipients, and agrochemical products. Our mission is to build lasting partnerships based on trust, quality, and reliability.",
   "We believe in delivering trust through quality. From pharma APIs and food raw materials to chemicals, excipients, and agrochemicals — we're here to serve industries that touch lives every day.",
 ] as const;
 
@@ -135,7 +135,7 @@ export const addressOneLine = [
 
 export const stats = [
   {
-    value: "1000+",
+    value: "800+",
     label: "Products supplied",
     detail: "APIs, excipients, intermediates, nutraceuticals and chemicals.",
   },
@@ -158,7 +158,7 @@ export const stats = [
 
 export const differentiators = [
   {
-    title: "One desk, one thousand line items",
+    title: "One desk, hundreds of line items",
     body: "Stop juggling a dozen vendors for a single formulation. We consolidate APIs, excipients, actives and solvents into one purchase order, one invoice and one point of accountability.",
     accent: "Consolidated sourcing",
   },
@@ -227,7 +227,7 @@ export const qualityCommitments = [
   },
   {
     title: "Drug Licence holder",
-    body: "N R Life Care trades under a valid drug licence and GST registration (24ADVPN9611L2ZU), with statutory documentation available for customer due diligence.",
+    body: "NR Life Care trades under a valid drug licence and GST registration (24ADVPN9611L2ZU), with statutory documentation available for customer due diligence.",
   },
   {
     title: "Supplier qualification",
@@ -247,7 +247,7 @@ export const timeline = [
   },
   {
     year: "2014",
-    title: "N R Life Care is founded",
+    title: "NR Life Care is founded",
     body: "The firm is established in Ahmedabad as a proprietorship, supplying pharmaceutical raw materials to formulators who wanted a supplier that answered the phone.",
   },
   {
@@ -258,12 +258,12 @@ export const timeline = [
   {
     year: "2020 – 2022",
     title: "Beyond pharma",
-    body: "Demand from cosmetics, food and beverage, agro, paint, textile and industrial customers pushes the range past a thousand line items across seventeen industries.",
+    body: "Demand from cosmetics, food and beverage, agro, paint, textile and industrial customers pushes the range across seventeen industries and hundreds of catalogue lines.",
   },
   {
     year: "Today",
     title: "Supplying customers worldwide",
-    body: "From the Odhav facility on Ahmedabad's S. P. Ring Road, N R Life Care ships pharmaceutical and specialty ingredients to buyers in India and overseas markets.",
+    body: "From the Odhav facility on Ahmedabad's S. P. Ring Road, NR Life Care ships pharmaceutical and specialty ingredients to buyers in India and overseas markets.",
   },
 ] as const;
 

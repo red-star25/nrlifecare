@@ -5,13 +5,14 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { ButtonLink } from "@/components/ui/button";
 import { ArrowRight } from "@/components/icons";
-import { getFeaturedProducts } from "@/data/catalog";
-import { HOMEPAGE_STAR_COUNT } from "@/data/star-products";
+import { getFeaturedProducts, hasCmsHomepageFeatured } from "@/data/catalog";
 
-const featured = getFeaturedProducts(HOMEPAGE_STAR_COUNT);
+const featured = getFeaturedProducts();
+const fromCms = hasCmsHomepageFeatured();
 
 /**
- * Homepage strip from dad’s star-product list (not Sanity checkboxes).
+ * Homepage strip: Sanity “Show on homepage” when any are flagged;
+ * otherwise falls back to the star list so the section is never empty.
  */
 export function FeaturedProducts() {
   if (!featured.length) return null;
@@ -21,13 +22,20 @@ export function FeaturedProducts() {
       <div className="shell">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <SectionHeading
-            eyebrow="Star products"
+            eyebrow={fromCms ? "Featured" : "Star products"}
             title="What buyers order most"
-            lede="Priority lines from our trading desk — the materials that move every week. See the full star list for everything we push hardest."
+            lede={
+              fromCms
+                ? "Hand-picked lines from the catalogue — toggled in Studio with “Show on homepage”. Pricing and documentation on request."
+                : "Priority lines from our trading desk. Mark products with “Show on homepage” in Studio (then pull) to curate this strip yourself."
+            }
           />
           <Reveal delay={0.1} className="flex shrink-0 flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/star-products" size="lg">
-              View star products
+            <ButtonLink
+              href={fromCms ? "/contact" : "/star-products"}
+              size="lg"
+            >
+              {fromCms ? "Request a quotation" : "View star products"}
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </ButtonLink>
             <ButtonLink href="/products" variant="secondary" size="lg">

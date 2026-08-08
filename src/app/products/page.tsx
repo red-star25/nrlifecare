@@ -6,13 +6,13 @@ import { CategoryGrid } from "@/components/category-grid";
 import { CtaBand } from "@/components/cta-band";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Document } from "@/components/icons";
-import { categories, totalProductCount } from "@/data/catalog";
+import { approxProductCountLabel, categories } from "@/data/catalog";
 import { catalogueDownloads } from "@/data/company";
 
 export const metadata: Metadata = {
   title: "Product Catalogue — APIs, Excipients, Intermediates & Chemicals",
   description:
-    "Search N R Life Care's catalogue of Active Pharmaceutical Ingredients, excipients, intermediates, vitamins, nutraceutical actives, food chemicals and industrial chemicals by product name, CAS number or pharmacopoeial grade.",
+    "Search NR Life Care's catalogue of Active Pharmaceutical Ingredients, excipients, intermediates, vitamins, nutraceutical actives, food chemicals and industrial chemicals by product name, CAS number or pharmacopoeial grade.",
   alternates: { canonical: "/products" },
 };
 
@@ -22,7 +22,7 @@ export default function ProductsPage() {
       <PageHero
         eyebrow="Product catalogue"
         title="Search by name, CAS number or grade"
-        lede={`A working selection of ${totalProductCount} materials we ship most often, across ${categories.length} categories. Our full range runs past a thousand line items — if you cannot see it here, ask.`}
+        lede={`A working selection of ${approxProductCountLabel} materials across ${categories.length} categories. If you cannot see a line here, ask — we source beyond what is listed online.`}
         crumbs={[{ label: "Products" }]}
       />
 

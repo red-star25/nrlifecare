@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { CtaBand } from "@/components/cta-band";
+import { LightAtmosphere } from "@/components/light-atmosphere";
 import { ProductMarketingCard } from "@/components/products/product-marketing-card";
-import { MolecularBackdrop } from "@/components/molecular-backdrop";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { ButtonLink } from "@/components/ui/button";
 import {
@@ -48,7 +48,7 @@ export async function generateMetadata({
 
   return {
     title: `${product.name}${casPart} Supplier & Exporter`,
-    description: `Buy ${product.name}${casPart} in bulk from N R Life Care, Ahmedabad.${gradePart} ${
+    description: `Buy ${product.name}${casPart} in bulk from NR Life Care, Ahmedabad.${gradePart} ${
       product.use ? `Used as ${product.use.toLowerCase()}. ` : ""
     }Certificate of Analysis and MSDS supplied with every consignment. Request pricing and lead time.`,
     alternates: { canonical: product.href },
@@ -74,12 +74,12 @@ export default async function ProductPage({ params }: PageProps) {
     `Quotation request: ${product.name}${product.cas ? ` (CAS ${product.cas})` : ""}`,
   );
   const enquiryBody = encodeURIComponent(
-    `Hello N R Life Care,\n\nPlease send a quotation for the following:\n\nProduct: ${product.name}\n${
+    `Hello NR Life Care,\n\nPlease send a quotation for the following:\n\nProduct: ${product.name}\n${
       product.cas ? `CAS No: ${product.cas}\n` : ""
     }${product.grade ? `Grade: ${product.grade}\n` : ""}Quantity required: \nDelivery destination: \nRequired by: \n\nThank you.`,
   );
   const whatsappText = encodeURIComponent(
-    `Hello N R Life Care, I would like a quotation for ${product.name}${
+    `Hello NR Life Care, I would like a quotation for ${product.name}${
       product.cas ? ` (CAS ${product.cas})` : ""
     }.`,
   );
@@ -169,19 +169,14 @@ export default async function ProductPage({ params }: PageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden bg-ink-950 pt-[112px] pb-16 md:pt-[136px] md:pb-20">
-        <div className="grid-lines pointer-events-none absolute inset-0 opacity-50" />
-        <MolecularBackdrop className="opacity-40" />
-        <div
-          className="glow pointer-events-none absolute -top-24 right-1/4 h-[360px] w-[360px] opacity-20"
-          aria-hidden="true"
-        />
+      <section className="relative isolate overflow-hidden bg-sand-50 pt-[112px] pb-16 md:pt-[136px] md:pb-20">
+        <LightAtmosphere variant="quiet" />
 
         <div className="shell relative">
           <nav aria-label="Breadcrumb" className="mb-7">
             <ol className="flex flex-wrap items-center gap-2 text-[12.5px] text-sand-500">
               <li>
-                <Link href="/" className="transition-colors hover:text-brand-300">
+                <Link href="/" className="transition-colors hover:text-brand-700">
                   Home
                 </Link>
               </li>
@@ -189,7 +184,7 @@ export default async function ProductPage({ params }: PageProps) {
                 <span aria-hidden="true">/</span>
                 <Link
                   href="/products"
-                  className="transition-colors hover:text-brand-300"
+                  className="transition-colors hover:text-brand-700"
                 >
                   Products
                 </Link>
@@ -198,43 +193,43 @@ export default async function ProductPage({ params }: PageProps) {
                 <span aria-hidden="true">/</span>
                 <Link
                   href={`/products/${category.slug}`}
-                  className="transition-colors hover:text-brand-300"
+                  className="transition-colors hover:text-brand-700"
                 >
                   {category.short}
                 </Link>
               </li>
               <li className="flex items-center gap-2">
                 <span aria-hidden="true">/</span>
-                <span className="text-sand-300">{product.name}</span>
+                <span className="text-ink-800">{product.name}</span>
               </li>
             </ol>
           </nav>
 
           <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
             <Reveal>
-              <p className="eyebrow text-brand-300">
-                <span className="h-px w-6 bg-brand-300/60" aria-hidden="true" />
+              <p className="eyebrow text-brand-700">
+                <span className="h-px w-6 bg-brand-500/70" aria-hidden="true" />
                 {category.short}
               </p>
 
-              <h1 className="mt-5 text-[clamp(2rem,4.5vw,3.2rem)] leading-[1.05] font-extrabold text-white">
+              <h1 className="mt-5 text-[clamp(2rem,4.5vw,3.2rem)] leading-[1.05] font-extrabold text-ink-900">
                 {product.name}
               </h1>
 
               <div className="mt-6 flex flex-wrap items-center gap-2.5">
                 {product.cas ? (
-                  <span className="rounded-full border border-white/12 bg-white/[0.06] px-4 py-2 font-mono text-[13px] text-brand-300 backdrop-blur">
+                  <span className="rounded-full border border-sand-200 bg-white px-4 py-2 font-mono text-[13px] text-brand-700 shadow-sm">
                     CAS {product.cas}
                   </span>
                 ) : null}
                 {product.grade ? (
-                  <span className="rounded-full border border-white/12 bg-white/[0.06] px-4 py-2 font-mono text-[13px] text-sand-300 backdrop-blur">
+                  <span className="rounded-full border border-sand-200 bg-white px-4 py-2 font-mono text-[13px] text-sand-600 shadow-sm">
                     {product.grade}
                   </span>
                 ) : null}
               </div>
 
-              <p className="mt-7 max-w-xl text-[16.5px] leading-relaxed text-sand-300/85">
+              <p className="mt-7 max-w-xl text-[16.5px] leading-relaxed text-sand-600">
                 {company.name} supplies {product.name} in bulk from Ahmedabad,
                 Gujarat
                 {product.use ? `, where it is typically used as ${product.use.toLowerCase()}` : ""}
@@ -252,7 +247,7 @@ export default async function ProductPage({ params }: PageProps) {
                 </ButtonLink>
                 <ButtonLink
                   href={`${company.whatsappHref}?text=${whatsappText}`}
-                  variant="onDark"
+                  variant="secondary"
                   size="lg"
                 >
                   <WhatsApp className="h-4.5 w-4.5" />
@@ -350,14 +345,14 @@ export default async function ProductPage({ params }: PageProps) {
             </Reveal>
 
             <Reveal delay={0.18}>
-              <div className="rounded-3xl bg-ink-950 p-7">
-                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-500/15 text-brand-300">
+              <div className="rounded-3xl border border-brand-100 bg-brand-50 p-7">
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-brand-700 ring-1 ring-brand-100">
                   <Shield className="h-5 w-5" />
                 </span>
-                <h3 className="mt-5 text-[17px] font-bold text-white">
+                <h3 className="mt-5 text-[17px] font-bold text-ink-900">
                   For manufacturing use
                 </h3>
-                <p className="mt-3 text-[14px] leading-relaxed text-sand-400">
+                <p className="mt-3 text-[14px] leading-relaxed text-sand-600">
                   This material is supplied to licensed pharmaceutical,
                   nutraceutical and industrial manufacturers in bulk quantities.
                   It is not sold for direct consumer use or self-medication.
