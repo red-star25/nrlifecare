@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { TrashIcon } from "@sanity/icons";
+import { TrashIcon } from "@sanity/icons/Trash";
 import { useDocumentOperation, type DocumentActionComponent } from "sanity";
 
 /**
