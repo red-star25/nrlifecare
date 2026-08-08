@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
+import { ProductMarketingCard } from "@/components/products/product-marketing-card";
 import { ArrowRight, Close, Search } from "@/components/icons";
 import { allProducts, categories } from "@/data/catalog";
 import { company } from "@/data/company";
@@ -226,41 +227,15 @@ function ProductCard({
   return (
     <Link
       href={product.href}
-      className="group flex h-full flex-col rounded-2xl border border-sand-200 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-[0_18px_40px_-24px_rgba(11,6,32,0.4)]"
+      className="group block h-full transition-transform duration-300 hover:-translate-y-0.5"
     >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="text-[15px] leading-snug font-semibold text-ink-900 transition-colors group-hover:text-brand-700">
-          {product.name}
-        </h3>
-        {product.grade ? (
-          <span className="shrink-0 rounded-md bg-brand-50 px-2 py-1 font-mono text-[10px] font-medium text-brand-700 ring-1 ring-brand-100">
-            {product.grade}
-          </span>
-        ) : null}
-      </div>
-
-      {product.cas ? (
-        <p className="mt-2.5 font-mono text-[12px] text-sand-500">
-          CAS {product.cas}
-        </p>
-      ) : null}
-
-      {product.use ? (
-        <p className="mt-2 flex-1 text-[13px] leading-relaxed text-sand-600">
-          {product.use}
-        </p>
-      ) : (
-        <div className="flex-1" />
-      )}
-
-      <div className="mt-4 flex items-center justify-between gap-3 border-t border-sand-100 pt-3.5">
-        <span className="truncate text-[11.5px] font-medium text-sand-500">
-          {product.categoryShort}
-        </span>
-        <span className="shrink-0 text-[12.5px] font-semibold text-brand-700 opacity-0 transition-opacity group-hover:opacity-100">
-          View details →
-        </span>
-      </div>
+      <ProductMarketingCard
+        name={product.name}
+        categoryLabel={product.categoryName}
+        cas={product.cas}
+        grade={product.grade}
+        variant="compact"
+      />
     </Link>
   );
 }

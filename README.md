@@ -94,8 +94,24 @@ catalogue.
    ```
 
 5. Open `https://<your-site>/studio`, sign in, and confirm products appear.
-6. After edits, run **Actions → Pull catalogue from Sanity**, or wire a Sanity
-   webhook to a GitHub `repository_dispatch` of type `sanity-catalogue-changed`.
+6. Wire auto-sync (so dad never has to run a workflow):
+
+   a. Create a GitHub Personal Access Token (classic) with the `repo` scope,
+      or a fine-grained token that can trigger workflows on this repository.
+      Store it in Vercel as `GH_DISPATCH_TOKEN`.
+
+   b. Invent a long random string and store it in Vercel as
+      `SANITY_WEBHOOK_SECRET` (and optionally `GH_REPO=red-star25/nrlifecare`).
+
+   c. In Sanity → API → Webhooks → Create webhook:
+      - URL: `https://nrlifecare.vercel.app/api/cms-webhook`
+      - Trigger: Create / Update / Delete on `product`
+      - HTTP header: `x-webhook-secret` = the same secret as above
+      - Dataset: `production`
+
+   After that, every Publish in Studio kicks off the pull Action automatically.
+   Until the webhook is set, you can still run **Actions → Pull catalogue from
+   Sanity** by hand.
 
 ### Day-to-day (for dad / employees)
 

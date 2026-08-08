@@ -84,7 +84,7 @@ export function SiteHeader() {
     >
       <div className="shell flex h-[72px] items-center justify-between gap-6">
         <Link href="/" aria-label={`${company.name} — home`} className="shrink-0">
-          <Logo variant={onDark ? "light" : "dark"} />
+          <Logo variant={onDark ? "light" : "dark"} priority />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">

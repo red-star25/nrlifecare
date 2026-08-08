@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { CtaBand } from "@/components/cta-band";
-import { ProductPhoto } from "@/components/products/product-photo";
-import { ProductVisual } from "@/components/products/product-visual";
+import { ProductMarketingCard } from "@/components/products/product-marketing-card";
 import { MolecularBackdrop } from "@/components/molecular-backdrop";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 import { ButtonLink } from "@/components/ui/button";
@@ -263,46 +262,13 @@ export default async function ProductPage({ params }: PageProps) {
             </Reveal>
 
             <Reveal delay={0.1}>
-              {product.image ? (
-                <div className="relative">
-                  <div
-                    className="glow pointer-events-none absolute -inset-8 opacity-25"
-                    aria-hidden="true"
-                  />
-                  <div className="relative overflow-hidden rounded-4xl border border-white/12 bg-white/[0.055] p-2 backdrop-blur-xl">
-                    <div className="overflow-hidden rounded-3xl bg-white">
-                      <ProductPhoto
-                        image={product.image}
-                        name={product.name}
-                        priority
-                        className="h-auto w-full"
-                      />
-                    </div>
-                    <dl className="grid grid-cols-3 gap-2 px-2 py-4">
-                      {[
-                        { label: "CAS", value: product.cas ?? "On request" },
-                        { label: "Grade", value: product.grade ?? "On request" },
-                        { label: "Origin", value: "India" },
-                      ].map((item) => (
-                        <div key={item.label} className="text-center">
-                          <dt className="text-[10.5px] tracking-[0.1em] text-sand-500 uppercase">
-                            {item.label}
-                          </dt>
-                          <dd className="mt-1 font-mono text-[12px] break-all text-sand-300">
-                            {item.value}
-                          </dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </div>
-                </div>
-              ) : (
-                <ProductVisual
-                  name={product.name}
-                  cas={product.cas}
-                  grade={product.grade}
-                />
-              )}
+              <ProductMarketingCard
+                name={product.name}
+                categoryLabel={category.name}
+                cas={product.cas}
+                grade={product.grade}
+                priority
+              />
             </Reveal>
           </div>
         </div>
@@ -496,28 +462,20 @@ export default async function ProductPage({ params }: PageProps) {
               </Link>
             </div>
 
-            <Stagger className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <Stagger className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {related.map((item) => (
                 <StaggerItem key={item.slug}>
                   <Link
                     href={item.href}
-                    className="group flex h-full flex-col rounded-2xl border border-sand-200 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-[0_18px_40px_-24px_rgba(11,6,32,0.4)]"
+                    className="group block transition-transform duration-300 hover:-translate-y-0.5"
                   >
-                    <h3 className="text-[14.5px] leading-snug font-semibold text-ink-900 group-hover:text-brand-700">
-                      {item.name}
-                    </h3>
-                    {item.cas ? (
-                      <p className="mt-2 font-mono text-[11.5px] text-sand-500">
-                        CAS {item.cas}
-                      </p>
-                    ) : null}
-                    {item.use ? (
-                      <p className="mt-2 flex-1 text-[12.5px] text-sand-600">
-                        {item.use}
-                      </p>
-                    ) : (
-                      <div className="flex-1" />
-                    )}
+                    <ProductMarketingCard
+                      name={item.name}
+                      categoryLabel={category.name}
+                      cas={item.cas}
+                      grade={item.grade}
+                      variant="compact"
+                    />
                   </Link>
                 </StaggerItem>
               ))}

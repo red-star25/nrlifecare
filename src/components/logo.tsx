@@ -5,6 +5,8 @@ type LogoProps = {
   variant?: "dark" | "light";
   /** Rendered height in pixels. Width follows the logo's 293:72 ratio. */
   height?: number;
+  /** Set true for the site header / hero LCP image. Leave false in grids. */
+  priority?: boolean;
 };
 
 const NATIVE_WIDTH = 293;
@@ -14,6 +16,7 @@ export function Logo({
   className = "",
   variant = "dark",
   height = 44,
+  priority = false,
 }: LogoProps) {
   const source =
     variant === "light"
@@ -26,7 +29,7 @@ export function Logo({
       alt="N R Life Care — Your Global Link To Trusted Pharma APIs"
       width={NATIVE_WIDTH}
       height={NATIVE_HEIGHT}
-      priority
+      priority={priority}
       className={`w-auto ${className}`}
       style={{ height }}
       sizes="240px"

@@ -14,8 +14,9 @@ import { WhatsAppFab } from "@/components/whatsapp-fab";
 export function SiteShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isStudio = pathname.startsWith("/studio");
+  const isPreview = pathname.startsWith("/preview");
 
-  if (isStudio) {
+  if (isStudio || isPreview) {
     return <>{children}</>;
   }
 
