@@ -10,6 +10,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { categoryMeta } from "../src/data/categories.ts";
+import { dedupeProducts } from "./lib/dedupe-products.mjs";
 import { productRows as previousRows } from "../src/data/products.generated.ts";
 
 const pdfPath = process.argv[2];
@@ -83,7 +84,7 @@ const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
 
 let currentSlug = null;
 const seen = new Set();
-const products = [];
+let products = [];
 
 for (const line of lines) {
   const section = SECTION_TITLES.find((title) => title === line);
@@ -129,9 +130,11 @@ if (products.length < 100) {
   process.exit(1);
 }
 
-const order = new Map(categoryMeta.map((category, index) => [category.slug, index]));
-products.sort(
-  (a, b) => (order.get(a.category) ?? 99) - (order.get(b.category) ?? 99),
+const beforeDedupe = products.length;
+const deduped = dedupeProducts(products);
+products = deduped.products;
+console.log(
+  `Collapsed ${deduped.removed} cross-category duplicates (${beforeDedupe} → ${products.length}).`,
 );
 
 const literal = (value) =>

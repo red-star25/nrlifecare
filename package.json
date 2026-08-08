@@ -11,6 +11,7 @@
     "catalog:sync": "node --experimental-strip-types --no-warnings scripts/sync-catalog.mjs",
     "catalog:export": "node --experimental-strip-types --no-warnings scripts/export-catalog-csv.mjs",
     "catalog:import-pdf": "node --experimental-strip-types --no-warnings scripts/import-pdf-catalogue.mjs",
+    "catalog:dedupe": "node --experimental-strip-types --no-warnings scripts/dedupe-catalog.mjs",
     "images:import": "node --experimental-strip-types --no-warnings scripts/import-legacy-images.mjs",
     "cms:push": "node --experimental-strip-types --no-warnings scripts/cms-push.mjs",
     "cms:pull": "node --experimental-strip-types --no-warnings scripts/cms-pull.mjs"

@@ -12,6 +12,7 @@ import { writeFile } from "node:fs/promises";
 import { createClient } from "@sanity/client";
 
 import { categoryMeta } from "../src/data/categories.ts";
+import { dedupeProducts } from "./lib/dedupe-products.mjs";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
@@ -48,15 +49,19 @@ if (!rows.length) {
   process.exit(1);
 }
 
+const { products: dedupedRows, removed } = dedupeProducts(rows);
+if (removed > 0) {
+  console.log(`Collapsed ${removed} duplicate Sanity rows before writing.`);
+}
 const order = new Map(categoryMeta.map((category, index) => [category.slug, index]));
-rows.sort(
+dedupedRows.sort(
   (a, b) => (order.get(a.category) ?? 99) - (order.get(b.category) ?? 99),
 );
 
 const literal = (value) =>
   value === undefined || value === null ? "undefined" : JSON.stringify(value);
 
-const body = rows
+const body = dedupedRows
   .map((product) => {
     const parts = [
       `category: ${literal(product.category)}`,
@@ -102,4 +107,6 @@ await writeFile(
   "utf8",
 );
 
-console.log(`Wrote products.generated.ts — ${rows.length} products from Sanity.`);
+console.log(
+  `Wrote products.generated.ts — ${dedupedRows.length} products from Sanity.`,
+);
