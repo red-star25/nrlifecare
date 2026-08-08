@@ -1,14 +1,23 @@
-name: Sync product catalogue
+name: Sync product catalogue (disabled)
 
-# Pulls the catalogue from the Google Sheet and commits it if anything changed.
-# Pushing the commit triggers whatever deployment is watching the branch.
+# DISABLED — the live catalogue is the 2026 PDF import + Sanity CMS.
+# Pulling the old Google Sheet overwrote ~1478 products with 322 and zeroed
+# out categories like Human Steroid APIs.
+#
+# Source of truth now:
+#   - Sanity Studio edits → cms-pull (or /api/cms-webhook)
+#   - Full re-seed from repo → cms-push
+#
+# Kept on disk so history is clear. Do not re-enable the schedule without
+# updating the sheet to the full 2026 catalogue first.
 
 on:
-  schedule:
-    # Hourly, on the half hour. GitHub queues cron generously, so treat this
-    # as "within an hour or so" rather than exact.
-    - cron: "30 * * * *"
-  workflow_dispatch: # lets you run it on demand from the Actions tab
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type ENABLE to run the legacy Google Sheet sync'
+        required: true
+        default: ''
 
 concurrency:
   group: sync-catalog
@@ -16,6 +25,7 @@ concurrency:
 
 jobs:
   sync:
+    if: ${{ github.event.inputs.confirm == 'ENABLE' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -40,8 +50,6 @@ jobs:
           fi
           npm run catalog:sync
 
-      # A broken sheet must never reach the site, so prove it still builds
-      # before committing anything.
       - name: Verify the site still builds
         run: npm run build
 

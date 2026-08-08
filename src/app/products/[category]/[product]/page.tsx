@@ -462,20 +462,28 @@ export default async function ProductPage({ params }: PageProps) {
               </Link>
             </div>
 
-            <Stagger className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <Stagger className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {related.map((item) => (
                 <StaggerItem key={item.slug}>
                   <Link
                     href={item.href}
-                    className="group block transition-transform duration-300 hover:-translate-y-0.5"
+                    className="group flex h-full flex-col rounded-2xl border border-sand-200 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-[0_18px_40px_-24px_rgba(11,6,32,0.4)]"
                   >
-                    <ProductMarketingCard
-                      name={item.name}
-                      categoryLabel={category.name}
-                      cas={item.cas}
-                      grade={item.grade}
-                      variant="compact"
-                    />
+                    <h3 className="text-[14.5px] leading-snug font-semibold text-ink-900 group-hover:text-brand-700">
+                      {item.name}
+                    </h3>
+                    {item.cas ? (
+                      <p className="mt-2 font-mono text-[11.5px] text-sand-500">
+                        CAS {item.cas}
+                      </p>
+                    ) : null}
+                    {item.use ? (
+                      <p className="mt-2 flex-1 text-[12.5px] text-sand-600">
+                        {item.use}
+                      </p>
+                    ) : (
+                      <div className="flex-1" />
+                    )}
                   </Link>
                 </StaggerItem>
               ))}
