@@ -9,6 +9,7 @@ const siteLinks = [
   { label: "Home", href: "/" },
   { label: "About us", href: "/about" },
   { label: "Product catalogue", href: "/products" },
+  { label: "Star products", href: "/star-products" },
   { label: "Industries served", href: "/industries" },
   { label: "Quality & compliance", href: "/quality" },
   { label: "Contact & enquiry", href: "/contact" },

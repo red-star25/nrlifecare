@@ -160,15 +160,26 @@ export function SiteHeader() {
                           })}
                         </div>
 
-                        <Link
-                          href="/products"
-                          className="mt-2 flex items-center justify-between rounded-2xl bg-ink-900 px-4 py-3 text-white transition-colors hover:bg-ink-800"
-                        >
-                          <span className="text-[13.5px] font-semibold">
-                            Search the full catalogue by name or CAS number
-                          </span>
-                          <ArrowRight className="h-4 w-4 shrink-0" />
-                        </Link>
+                        <div className="mt-2 grid gap-1 sm:grid-cols-2">
+                          <Link
+                            href="/star-products"
+                            className="flex items-center justify-between rounded-2xl bg-brand-600 px-4 py-3 text-white transition-colors hover:bg-brand-700"
+                          >
+                            <span className="text-[13.5px] font-semibold">
+                              Star products
+                            </span>
+                            <ArrowRight className="h-4 w-4 shrink-0" />
+                          </Link>
+                          <Link
+                            href="/products"
+                            className="flex items-center justify-between rounded-2xl bg-ink-900 px-4 py-3 text-white transition-colors hover:bg-ink-800"
+                          >
+                            <span className="text-[13.5px] font-semibold">
+                              Search full catalogue
+                            </span>
+                            <ArrowRight className="h-4 w-4 shrink-0" />
+                          </Link>
+                        </div>
                       </div>
                     </motion.div>
                   ) : null}
@@ -251,6 +262,14 @@ export function SiteHeader() {
                   </Link>
                 ))}
               </nav>
+
+              <Link
+                href="/star-products"
+                className="mt-6 flex items-center justify-between rounded-2xl bg-brand-600 px-4 py-3.5 text-white"
+              >
+                <span className="text-[14.5px] font-semibold">Star products</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
 
               <p className="eyebrow mt-6 text-sand-500">Product categories</p>
               <div className="mt-3 grid gap-1.5">

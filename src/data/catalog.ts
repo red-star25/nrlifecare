@@ -1,6 +1,13 @@
 import { categoryMeta } from "./categories";
 import { productImages as importedImages } from "./product-images.generated";
-import { productRows } from "./products.generated";
+import { productRows, type ProductRow } from "./products.generated";
+import { starProductAdditions } from "./star-product-additions";
+import {
+  HOMEPAGE_STAR_COUNT,
+  STAR_NAME_ALIASES,
+  STAR_PRODUCT_NAMES,
+  normaliseProductName,
+} from "./star-products";
 
 export type Product = {
   name: string;
@@ -24,8 +31,24 @@ export type Category = {
   products: Product[];
 };
 
+function rowKey(row: Pick<ProductRow, "category" | "name">) {
+  return `${row.category}::${row.name.toLowerCase()}`;
+}
+
+/** PDF/Sanity dump plus star-list additions that are not already present. */
+const mergedProductRows: ProductRow[] = (() => {
+  const seen = new Set(productRows.map(rowKey));
+  const extras = starProductAdditions.filter((row) => {
+    const key = rowKey(row);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  return [...productRows, ...extras];
+})();
+
 const productsByCategory = new Map<string, Product[]>();
-for (const row of productRows) {
+for (const row of mergedProductRows) {
   const bucket = productsByCategory.get(row.category);
   const product: Product = {
     name: row.name,
@@ -110,46 +133,96 @@ export function hasDistinctPhoto(product: { image?: string }) {
   return Boolean(product.image) && imageUsage.get(product.image!) === 1;
 }
 
-/**
- * Products marked “Show on homepage” in Sanity, in the order set there.
- *
- * Only explicitly featured products are shown — we do not pad the grid with
- * other catalogue rows. If none are marked, fall back to a small spread of
- * products that have a distinct photograph so the homepage is not empty.
- */
-export function getFeaturedProducts(limit = 6) {
-  const marked = allProducts
-    .filter((product) => product.featured)
-    .sort(
-      (a, b) =>
-        (a.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
-        (b.featuredOrder ?? Number.MAX_SAFE_INTEGER),
-    );
-
-  if (marked.length > 0) return marked.slice(0, limit);
-
-  const candidates = allProducts.filter((product) => hasDistinctPhoto(product));
-  const byCategory = new Map<string, typeof candidates>();
-  for (const product of candidates) {
-    const bucket = byCategory.get(product.categorySlug);
+function catalogueIndex() {
+  const byNorm = new Map<string, CatalogProduct[]>();
+  for (const product of allProducts) {
+    const key = normaliseProductName(product.name);
+    const bucket = byNorm.get(key);
     if (bucket) bucket.push(product);
-    else byCategory.set(product.categorySlug, [product]);
+    else byNorm.set(key, [product]);
   }
+  return byNorm;
+}
 
-  const spread: typeof candidates = [];
-  let exhausted = false;
-  while (!exhausted && spread.length < limit) {
-    exhausted = true;
-    for (const bucket of byCategory.values()) {
-      const next = bucket.shift();
-      if (!next) continue;
-      exhausted = false;
-      spread.push(next);
-      if (spread.length >= limit) break;
+function pickPreferred(candidates: CatalogProduct[]) {
+  return (
+    candidates.find((product) => product.categorySlug === "human-steroid-apis") ??
+    candidates.find(
+      (product) => product.categorySlug === "active-pharmaceutical-ingredients",
+    ) ??
+    candidates[0]
+  );
+}
+
+function matchStarName(
+  starName: string,
+  byNorm: Map<string, CatalogProduct[]>,
+): CatalogProduct | undefined {
+  let key = normaliseProductName(starName);
+  key = STAR_NAME_ALIASES[key] ?? key;
+
+  const direct = byNorm.get(key);
+  if (direct?.length) return pickPreferred(direct);
+
+  // Loose contains match for near-names (e.g. Trimethoprim → Trimethoprim Powder)
+  const loose: CatalogProduct[] = [];
+  for (const [norm, products] of byNorm) {
+    if (norm.includes(key) || key.includes(norm)) {
+      if (Math.min(norm.length, key.length) < 5) continue;
+      loose.push(...products);
     }
   }
+  if (!loose.length) return undefined;
 
-  return spread;
+  const unique = new Map<string, CatalogProduct>();
+  for (const product of loose) {
+    unique.set(`${product.categorySlug}:${product.slug}`, product);
+  }
+  return pickPreferred([...unique.values()]);
+}
+
+export type StarCatalogueEntry = {
+  /** Name as written in dad’s star list. */
+  listName: string;
+  /** Matched catalogue product, if we have a page for it. */
+  product?: CatalogProduct;
+};
+
+/**
+ * Resolve the star list against the live catalogue, preserving list order.
+ * Unmatched names are kept so the star page can still offer an enquiry CTA.
+ */
+export function getStarCatalogue(): StarCatalogueEntry[] {
+  const byNorm = catalogueIndex();
+  const used = new Set<string>();
+
+  return STAR_PRODUCT_NAMES.map((listName) => {
+    const product = matchStarName(listName, byNorm);
+    if (!product) return { listName };
+
+    const id = `${product.categorySlug}:${product.slug}`;
+    if (used.has(id)) return { listName };
+    used.add(id);
+    return { listName, product };
+  });
+}
+
+/**
+ * Homepage lead products — top of dad’s star list that resolve in the catalogue.
+ */
+export function getFeaturedProducts(limit = HOMEPAGE_STAR_COUNT) {
+  const fromStars = getStarCatalogue()
+    .filter((entry): entry is StarCatalogueEntry & { product: CatalogProduct } =>
+      Boolean(entry.product),
+    )
+    .map((entry) => entry.product)
+    .slice(0, limit);
+
+  if (fromStars.length > 0) return fromStars;
+
+  // Fallback if the star list somehow matches nothing.
+  const candidates = allProducts.filter((product) => hasDistinctPhoto(product));
+  return candidates.slice(0, limit);
 }
 
 /** Other products in the same category, for cross-linking. */
