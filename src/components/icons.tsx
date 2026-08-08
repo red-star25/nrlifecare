@@ -203,11 +203,16 @@ export const categoryIcons: Record<
   (props: IconProps) => React.JSX.Element
 > = {
   "active-pharmaceutical-ingredients": Molecule,
+  "antibiotic-powders": Shield,
+  "human-steroid-apis": Beaker,
+  "pharmaceutical-materials": Layers,
   "pharmaceutical-excipients": Layers,
   "pharmaceutical-intermediates": Beaker,
   "vitamins-and-minerals": Shield,
   "nutraceutical-ingredients": Leaf,
   "food-and-agro-chemicals": Flask,
+  "chemical-powders": Factory,
   "industrial-and-specialty-chemicals": Factory,
+  "organic-and-inorganic-chemicals": Flask,
   "veterinary-and-feed-additives": Truck,
 };

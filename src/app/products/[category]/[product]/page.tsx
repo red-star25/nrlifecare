@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { CtaBand } from "@/components/cta-band";
+import { ProductPhoto } from "@/components/products/product-photo";
 import { ProductVisual } from "@/components/products/product-visual";
 import { MolecularBackdrop } from "@/components/molecular-backdrop";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
@@ -262,11 +263,46 @@ export default async function ProductPage({ params }: PageProps) {
             </Reveal>
 
             <Reveal delay={0.1}>
-              <ProductVisual
-                name={product.name}
-                cas={product.cas}
-                grade={product.grade}
-              />
+              {product.image ? (
+                <div className="relative">
+                  <div
+                    className="glow pointer-events-none absolute -inset-8 opacity-25"
+                    aria-hidden="true"
+                  />
+                  <div className="relative overflow-hidden rounded-4xl border border-white/12 bg-white/[0.055] p-2 backdrop-blur-xl">
+                    <div className="overflow-hidden rounded-3xl bg-white">
+                      <ProductPhoto
+                        image={product.image}
+                        name={product.name}
+                        priority
+                        className="h-auto w-full"
+                      />
+                    </div>
+                    <dl className="grid grid-cols-3 gap-2 px-2 py-4">
+                      {[
+                        { label: "CAS", value: product.cas ?? "On request" },
+                        { label: "Grade", value: product.grade ?? "On request" },
+                        { label: "Origin", value: "India" },
+                      ].map((item) => (
+                        <div key={item.label} className="text-center">
+                          <dt className="text-[10.5px] tracking-[0.1em] text-sand-500 uppercase">
+                            {item.label}
+                          </dt>
+                          <dd className="mt-1 font-mono text-[12px] break-all text-sand-300">
+                            {item.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                </div>
+              ) : (
+                <ProductVisual
+                  name={product.name}
+                  cas={product.cas}
+                  grade={product.grade}
+                />
+              )}
             </Reveal>
           </div>
         </div>

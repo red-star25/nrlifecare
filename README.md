@@ -17,7 +17,7 @@ Built as a fully independent site — no marketplace lock-in, no Indiamart or Tr
 | Fonts      | Sora (display), Inter (body), JetBrains Mono  |
 | Rendering  | Fully static — every route is prerendered     |
 
-No database, no CMS and no server runtime, so the site can be hosted anywhere static files can be served.
+Catalogue editing uses Sanity CMS (`/studio`). The public site stays mostly prerendered; only `/api/enquiry` and `/studio` need a server runtime (Vercel).
 
 ## Getting started
 
@@ -36,9 +36,9 @@ npm run lint     # eslint
 
 ## Brand
 
-The palette is derived from the company logo. The logo indigo is `#2a176f`,
-exposed as `--color-brand-800` in `src/app/globals.css`; every other brand shade
-is a tint or shade of it. Gold (`--color-gold-*`) is used sparingly for trust and
+The palette is derived from the company logo indigo, lifted slightly so dark
+sections read as rich purple-blue rather than near-black. Logo artwork stays
+`#2a176f` (`--color-brand-900`); UI chrome uses the lighter `--color-brand-800`. Gold (`--color-gold-*`) is used sparingly for trust and
 credential signals.
 
 Logo files live in `public/`:
@@ -52,137 +52,76 @@ These were recovered from the existing site at 293x72. If a vector (SVG/AI/EPS)
 original is available from the printer or designer, drop it in and update
 `src/components/logo.tsx` — it will stay crisp at any size.
 
-## Updating the product catalogue
+## Updating the product catalogue (Sanity CMS)
 
-Products live in a Google Sheet, not in the code. Nobody needs a developer, a
-login, or a CMS to add a product — edit the sheet, and the site follows within
-the hour.
+Day-to-day edits happen in **Sanity Studio** at `/studio`. Your dad or an
+employee can add products, upload a photo, and tick **Show on homepage** —
+no code, no Google Sheet.
 
 ### How it fits together
 
 ```
-Google Sheet  ──published as CSV──>  GitHub Action (hourly)
-                                          │
-                                          ├─ validates every row
-                                          ├─ writes src/data/products.generated.ts
-                                          ├─ runs a full production build
-                                          └─ commits only if the build passed
-                                                    │
-                                                    └──> host redeploys
+Sanity Studio (/studio) ──publish──> Sanity webhook
+                                         │
+                                         ▼
+                              GitHub Action (cms-pull)
+                                         │
+                    writes src/data/products.generated.ts
+                                         │
+                              build + commit + Vercel redeploy
 ```
 
-`src/data/products.generated.ts` is committed to the repository, so **builds
-never depend on the sheet being reachable**. If Google is down, or the sheet is
-mid-edit, the site keeps building from the last good copy.
-
-### Sheet format
-
-One row per product. The header row must be present; column order does not
-matter and capitalisation is ignored.
-
-| Column | Required | Notes |
-| --- | --- | --- |
-| `category` | Yes | Slug, full name or short name — `vitamins-and-minerals`, `Vitamins & Minerals` and `Vitamins and Minerals` all work |
-| `name` | Yes | Product name. Becomes the page URL |
-| `cas` | No | CAS registry number |
-| `grade` | No | e.g. `IP / BP / USP` |
-| `use` | No | One short line describing the application |
-
-Valid category values come from `src/data/categories.ts`. To add a whole new
-category, add it there — that part is editorial prose and does change rarely.
+The generated file is committed, so **builds never depend on Sanity being
+reachable**. If Sanity is briefly down, the site keeps shipping the last good
+catalogue.
 
 ### First-time setup
 
-1. Seed the sheet with what is already on the site:
+1. Create a free project at [sanity.io/manage](https://www.sanity.io/manage).
+2. Copy the project ID into `.env.local` and into Vercel / GitHub secrets:
 
-   ```bash
-   npm run catalog:export     # writes catalog-export.csv
+   ```
+   NEXT_PUBLIC_SANITY_PROJECT_ID=xxxx
+   NEXT_PUBLIC_SANITY_DATASET=production
+   SANITY_API_TOKEN=sk...   # Editor token with write access
    ```
 
-   Open the CSV, copy everything, paste into a new Google Sheet.
+3. Invite dad/employees as **Editors** in the Sanity project members screen.
+4. Seed Sanity from the current catalogue:
 
-2. In the sheet: **File → Share → Publish to web**, choose the sheet and
-   **Comma-separated values (.csv)**, publish, and copy the URL. It looks like
-   `https://docs.google.com/spreadsheets/d/e/…/pub?gid=0&single=true&output=csv`.
+   ```bash
+   npm run cms:push
+   ```
 
-   Publishing exposes only that one tab as read-only CSV. It does not make the
-   document editable by anyone.
+5. Open `https://<your-site>/studio`, sign in, and confirm products appear.
+6. After edits, run **Actions → Pull catalogue from Sanity**, or wire a Sanity
+   webhook to a GitHub `repository_dispatch` of type `sanity-catalogue-changed`.
 
-3. In GitHub: **Settings → Secrets and variables → Actions → New repository
-   secret**, named `CATALOG_CSV_URL`, set to that URL.
+### Day-to-day (for dad / employees)
 
-4. Run it once by hand from the **Actions** tab → *Sync product catalogue* →
-   *Run workflow*, to confirm the wiring.
+1. Go to `/studio` and sign in.
+2. Open **Product** → edit or create.
+3. Fill name, category, optional CAS / grade / use.
+4. Upload a photo if you have one.
+5. Tick **Show on homepage** for popular products (set order if you care).
+6. Publish.
 
-### Day-to-day
+### Homepage featured products
 
-Your dad edits the sheet. Within the hour the Action picks it up, validates it,
-builds the site, and commits. Nothing else to do.
+Any product with **Show on homepage** ticked appears in the “What buyers order
+most” section, sorted by **Homepage order** (lower first).
 
-To pull changes immediately, either trigger the workflow from the Actions tab,
-or run it locally:
+### Importing a new PDF catalogue
 
 ```bash
-CATALOG_CSV_URL="https://docs.google.com/..." npm run catalog:sync
-npm run build
+npm run catalog:import-pdf -- "/path/to/catalogue.pdf"
+npm run cms:push    # after Sanity is configured
 ```
 
-### CAS numbers and the spreadsheet date problem
+### Legacy Google Sheet sync
 
-Google Sheets reads `114-07-8` as a date and silently rewrites it to
-`0114-07-08`. This is the same coercion that famously forced human gene names
-to be changed, and on a chemical catalogue it is a correctness problem, not a
-cosmetic one.
-
-The sync defends against it. A CAS number carries a check digit — the digits of
-the first two parts, reversed and weighted 1..n, sum mod 10 — so the zero
-padding can be stripped and the result *verified* rather than guessed. Anything
-that fails to verify is left alone and reported:
-
-```
-Repaired 18 CAS number(s) that the spreadsheet had reformatted as dates.
-  Erythromycin: 0114-07-08 → 114-07-8
-  ...
-
-2 CAS number(s) look wrong — worth checking:
-  Folic Acid (Vitamin B9): CAS "59-30-7" fails the check digit.
-```
-
-That second list is worth reading. It catches genuine typos, not just
-spreadsheet damage.
-
-To stop the mangling at source, select the CAS column in the sheet and choose
-**Format → Number → Plain text**.
-
-### What happens when the sheet has a mistake
-
-The sync refuses to write and the Action fails loudly, leaving the live site on
-the last good catalogue. It rejects unknown categories, duplicate products
-within a category, empty names, and an empty sheet:
-
-```
-Refusing to write — 3 problem(s) in the sheet:
-
-  Row 3: unknown category "not-a-real-category" for "Widget".
-  Row 4: "Paracetamol" already listed in active-pharmaceutical-ingredients on row 2.
-  Row 5: name is empty.
-```
-
-### Making it instant instead of hourly
-
-If waiting up to an hour is annoying, add this Apps Script to the sheet
-(**Extensions → Apps Script**) and set an *On edit* trigger. Create a deploy
-hook on your host and paste its URL in:
-
-```javascript
-function onEditTrigger() {
-  UrlFetchApp.fetch("https://api.vercel.com/v1/integrations/deploy/...", {
-    method: "post",
-  });
-}
-```
-
-Still no backend, still no server to maintain.
+The old sheet workflow (`catalog:sync`) still exists but is retired for
+day-to-day use. Prefer Sanity.
 
 ## Staging vs production
 

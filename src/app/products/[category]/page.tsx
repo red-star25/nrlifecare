@@ -13,7 +13,9 @@ import { SITE_URL, company } from "@/data/company";
 type PageProps = { params: Promise<{ category: string }> };
 
 export function generateStaticParams() {
-  return categories.map((item) => ({ category: item.slug }));
+  return categories
+    .filter((item) => item.products.length > 0)
+    .map((item) => ({ category: item.slug }));
 }
 
 export async function generateMetadata({

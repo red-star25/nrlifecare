@@ -1,23 +1,26 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand — built around the N R Life Care logo indigo (#2a176f = brand-800) */
-  --color-ink-950: #0b0620;
-  --color-ink-900: #130b31;
-  --color-ink-800: #1c1244;
-  --color-ink-700: #261959;
+  /*
+   * Brand — same indigo family as the logo, lifted so dark sections read as
+   * rich purple-blue rather than near-black. Logo artwork is unchanged.
+   */
+  --color-ink-950: #1e1654;
+  --color-ink-900: #2a1f6b;
+  --color-ink-800: #352a7a;
+  --color-ink-700: #42368a;
 
-  --color-brand-50: #f4f3fc;
-  --color-brand-100: #eae7f9;
-  --color-brand-200: #d5cff3;
-  --color-brand-300: #b3a8e8;
-  --color-brand-400: #8e7cd8;
-  --color-brand-500: #6f57c6;
-  --color-brand-600: #573dae;
-  --color-brand-700: #3f2890;
-  --color-brand-800: #2a176f;
-  --color-brand-900: #231460;
-  --color-brand-950: #150b3c;
+  --color-brand-50: #f5f4fd;
+  --color-brand-100: #ebe9fb;
+  --color-brand-200: #d8d3f5;
+  --color-brand-300: #b8afe9;
+  --color-brand-400: #9586db;
+  --color-brand-500: #7463c9;
+  --color-brand-600: #5b45c0;
+  --color-brand-700: #4a35a8;
+  --color-brand-800: #3b278f;
+  --color-brand-900: #2a176f;
+  --color-brand-950: #1e1258;
 
   /* Credential gold — used sparingly for trust signals against the indigo */
   --color-gold-300: #f8d57e;

@@ -1,0 +1,59 @@
+name: Pull catalogue from Sanity
+
+# Runs when Sanity fires a webhook after dad/employees publish changes,
+# or manually from the Actions tab.
+
+on:
+  repository_dispatch:
+    types: [sanity-catalogue-changed]
+  workflow_dispatch:
+
+concurrency:
+  group: cms-pull
+  cancel-in-progress: false
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Pull catalogue from Sanity
+        env:
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
+          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
+        run: |
+          if [ -z "$NEXT_PUBLIC_SANITY_PROJECT_ID" ] || [ -z "$SANITY_API_TOKEN" ]; then
+            echo "::error::Sanity secrets are not set."
+            exit 1
+          fi
+          npm run cms:pull
+
+      - name: Verify the site still builds
+        run: npm run build
+
+      - name: Commit if the catalogue changed
+        run: |
+          if git diff --quiet -- src/data/products.generated.ts; then
+            echo "No catalogue changes."
+            exit 0
+          fi
+
+          COUNT=$(grep -c '^  { category:' src/data/products.generated.ts)
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/products.generated.ts
+          git commit -m "Update product catalogue from Sanity (${COUNT} products)"
+          git push

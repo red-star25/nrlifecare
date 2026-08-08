@@ -10,7 +10,7 @@
  * process exits non-zero — a malformed sheet can never break the live site.
  */
 
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import { categoryMeta } from "../src/data/categories.ts";
 import { parseCsvRecords } from "./lib/csv.mjs";
 
@@ -111,6 +111,22 @@ function repairCas(cas) {
   return casChecksumOk(candidate) ? candidate : null;
 }
 
+/**
+ * Spreadsheets express "yes" in many ways depending on who typed it and
+ * whether the cell was a checkbox.
+ */
+function isTruthy(value) {
+  return /^(true|yes|y|1|x|✓)$/i.test((value ?? "").trim());
+}
+
+/**
+ * Photographs live in the repository, not in the sheet. The sheet names one,
+ * so a typo should be reported rather than silently producing a broken image.
+ */
+const knownImages = new Set(
+  await readdir(new URL("../public/products/", import.meta.url)).catch(() => []),
+);
+
 const errors = [];
 const warnings = [];
 const repairs = [];
@@ -154,12 +170,25 @@ for (const record of records) {
     }
   }
 
+  const image = (record.image || "").trim() || undefined;
+  if (image && !knownImages.has(image)) {
+    warnings.push(
+      `${name}: image "${image}" is not in public/products — the page will fall back to no photo.`,
+    );
+  }
+
+  const featured = isTruthy(record.featured);
+  const featuredOrder = Number.parseInt(record.featured_order ?? "", 10);
+
   products.push({
     category: slug,
     name,
     cas,
     grade: record.grade || undefined,
     use: record.use || undefined,
+    image,
+    featured: featured || undefined,
+    featuredOrder: Number.isFinite(featuredOrder) ? featuredOrder : undefined,
   });
 }
 
@@ -190,6 +219,11 @@ const body = products
     if (product.cas) parts.push(`cas: ${literal(product.cas)}`);
     if (product.grade) parts.push(`grade: ${literal(product.grade)}`);
     if (product.use) parts.push(`use: ${literal(product.use)}`);
+    if (product.image) parts.push(`image: ${literal(product.image)}`);
+    if (product.featured) parts.push(`featured: true`);
+    if (product.featuredOrder !== undefined) {
+      parts.push(`featuredOrder: ${product.featuredOrder}`);
+    }
     return `  { ${parts.join(", ")} },`;
   })
   .join("\n");
@@ -205,6 +239,12 @@ export type ProductRow = {
   cas?: string;
   grade?: string;
   use?: string;
+  /** Filename under /public/products. */
+  image?: string;
+  /** Marked in the sheet as a product worth showing on the homepage. */
+  featured?: boolean;
+  /** Lower sorts first among featured products. */
+  featuredOrder?: number;
 };
 
 export const productRows: ProductRow[] = [

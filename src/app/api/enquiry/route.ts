@@ -107,8 +107,8 @@ export async function POST(request: Request) {
   const message = text(payload, "message");
 
   const html = `
-    <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#1c1244">
-      <h2 style="margin:0 0 4px;color:#2a176f">New enquiry from the website</h2>
+    <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#2a1f6b">
+      <h2 style="margin:0 0 4px;color:#3b278f">New enquiry from the website</h2>
       <p style="margin:0 0 20px;color:#55536b;font-size:14px">
         ${escapeHtml(name)}${text(payload, "company") ? ` · ${escapeHtml(text(payload, "company"))}` : ""}
       </p>

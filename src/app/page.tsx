@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
+import { FeaturedProducts } from "@/components/home/featured-products";
 import { Hero } from "@/components/home/hero";
 import { IndustryMarquee } from "@/components/home/industry-marquee";
 import { CategoryGrid } from "@/components/category-grid";
@@ -11,7 +12,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { ArrowRight, Check, Document, Globe, Shield } from "@/components/icons";
 import { differentiators, process, stats } from "@/data/company";
 import { industries } from "@/data/industries";
-import { totalProductCount } from "@/data/catalog";
+import { categories, totalProductCount } from "@/data/catalog";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -62,15 +63,18 @@ export default function HomePage() {
         </Stagger>
       </section>
 
+      <FeaturedProducts />
+
       {/* Categories */}
-      <section className="border-y border-sand-200 bg-white py-16 md:py-24">
+      <section className="border-b border-sand-200 bg-white py-16 md:py-24">
         <div className="shell">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHeading
               eyebrow="What we supply"
               title={
                 <>
-                  Eight categories.
+                  {categories.filter((c) => c.products.length > 0).length}{" "}
+                  categories.
                   <br />
                   {totalProductCount} listed online.
                 </>

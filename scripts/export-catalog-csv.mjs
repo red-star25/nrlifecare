@@ -13,10 +13,20 @@
 
 import { writeFile } from "node:fs/promises";
 import { categoryMeta } from "../src/data/categories.ts";
+import { productImages } from "../src/data/product-images.generated.ts";
 import { productRows } from "../src/data/products.generated.ts";
 import { toCsv } from "./lib/csv.mjs";
 
 const order = new Map(categoryMeta.map((category, i) => [category.slug, i]));
+
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .replace(/%/g, " percent ")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 const rows = [...productRows]
   .sort((a, b) => (order.get(a.category) ?? 0) - (order.get(b.category) ?? 0))
@@ -26,9 +36,17 @@ const rows = [...productRows]
     product.cas ?? "",
     product.grade ?? "",
     product.use ?? "",
+    // Seed the column with whatever the legacy import found, so the sheet
+    // starts out matching the site rather than blank.
+    product.image ?? productImages[slugify(product.name)] ?? "",
+    product.featured ? "yes" : "",
+    product.featuredOrder ?? "",
   ]);
 
-const csv = toCsv(["category", "name", "cas", "grade", "use"], rows);
+const csv = toCsv(
+  ["category", "name", "cas", "grade", "use", "image", "featured", "featured_order"],
+  rows,
+);
 await writeFile("catalog-export.csv", `${csv}\n`, "utf8");
 
 console.log(`Wrote catalog-export.csv — ${rows.length} products.`);

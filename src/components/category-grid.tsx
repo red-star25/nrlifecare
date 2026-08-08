@@ -5,9 +5,11 @@ import { Stagger, StaggerItem } from "@/components/ui/reveal";
 import { categories } from "@/data/catalog";
 
 export function CategoryGrid() {
+  const visible = categories.filter((category) => category.products.length > 0);
+
   return (
     <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {categories.map((category) => {
+      {visible.map((category) => {
         const Icon =
           categoryIcons[category.slug] ??
           categoryIcons["active-pharmaceutical-ingredients"];
