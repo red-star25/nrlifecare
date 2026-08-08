@@ -1,0 +1,38 @@
+name: Push catalogue to Sanity
+
+# One-time / occasional seed from the repo into Sanity.
+# Day-to-day edits go the other way (Sanity → cms-pull).
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: cms-push
+  cancel-in-progress: false
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Push catalogue to Sanity
+        env:
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
+          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
+        run: |
+          if [ -z "$NEXT_PUBLIC_SANITY_PROJECT_ID" ] || [ -z "$SANITY_API_TOKEN" ]; then
+            echo "::error::Sanity secrets are not set in GitHub."
+            exit 1
+          fi
+          # Dataset defaults to production if the secret was omitted
+          export NEXT_PUBLIC_SANITY_DATASET="${NEXT_PUBLIC_SANITY_DATASET:-production}"
+          npm run cms:push
