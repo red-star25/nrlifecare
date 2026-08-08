@@ -802,7 +802,7 @@ export const productRows: ProductRow[] = [
   { category: "organic-and-inorganic-chemicals", name: "Glycerin" },
   { category: "organic-and-inorganic-chemicals", name: "Glyceryl Monostearate / GMS" },
   { category: "organic-and-inorganic-chemicals", name: "Grade Confirmation" },
-  { category: "organic-and-inorganic-chemicals", name: "Guar Gum", cas: "9000-30-0", grade: "IP / BP", use: "Binder, thickener", featured: true, featuredOrder: 1 },
+  { category: "organic-and-inorganic-chemicals", name: "Guar Gum", cas: "9000-30-0", grade: "IP / BP", use: "Binder, thickener", featuredOrder: 1 },
   { category: "organic-and-inorganic-chemicals", name: "HPMC" },
   { category: "organic-and-inorganic-chemicals", name: "IP / BP / USP / EP / JP, food, cosmetic, technical or" },
   { category: "organic-and-inorganic-chemicals", name: "Import / Export Compliance" },
