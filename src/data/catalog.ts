@@ -111,12 +111,11 @@ export function hasDistinctPhoto(product: { image?: string }) {
 }
 
 /**
- * Products the proprietor has marked as worth leading with, in the order he
- * chose. He knows what actually sells; nothing here infers it.
+ * Products marked “Show on homepage” in Sanity, in the order set there.
  *
- * Until the column is filled in, fall back to products with a photograph that
- * is theirs alone. Picking purely on "has an image" surfaced six APIs sharing
- * one stock photo, which looked worse than showing nothing.
+ * Only explicitly featured products are shown — we do not pad the grid with
+ * other catalogue rows. If none are marked, fall back to a small spread of
+ * products that have a distinct photograph so the homepage is not empty.
  */
 export function getFeaturedProducts(limit = 6) {
   const marked = allProducts
@@ -127,17 +126,9 @@ export function getFeaturedProducts(limit = 6) {
         (b.featuredOrder ?? Number.MAX_SAFE_INTEGER),
     );
 
-  if (marked.length >= limit) return marked.slice(0, limit);
+  if (marked.length > 0) return marked.slice(0, limit);
 
-  const taken = new Set(marked.map((product) => product.slug));
-  const candidates = allProducts.filter(
-    (product) => !taken.has(product.slug) && hasDistinctPhoto(product),
-  );
-
-  // Taking candidates in catalogue order fills the grid with APIs, and every
-  // API photograph is a bowl of white powder. Rotating through categories
-  // surfaces the packaging and commodity shots, which both look better and
-  // show more of what the company actually sells.
+  const candidates = allProducts.filter((product) => hasDistinctPhoto(product));
   const byCategory = new Map<string, typeof candidates>();
   for (const product of candidates) {
     const bucket = byCategory.get(product.categorySlug);
@@ -158,7 +149,7 @@ export function getFeaturedProducts(limit = 6) {
     }
   }
 
-  return [...marked, ...spread].slice(0, limit);
+  return spread;
 }
 
 /** Other products in the same category, for cross-linking. */

@@ -68,15 +68,26 @@ export const product = defineType({
       type: "boolean",
       group: "homepage",
       initialValue: false,
-      description: "Tick to feature this product under “What buyers order most”.",
+      description:
+        "Turn this ON, then Publish. Only products with this on appear under “What buyers order most”.",
     }),
     defineField({
       name: "featuredOrder",
       title: "Homepage order",
       type: "number",
       group: "homepage",
-      description: "Lower numbers appear first. Leave blank if not featured.",
+      description: "Lower numbers appear first (1, then 2, …).",
       hidden: ({ document }) => !document?.featured,
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const featured = Boolean(
+            (context.document as { featured?: boolean } | undefined)?.featured,
+          );
+          if (!featured) return true;
+          if (value === undefined || value === null) return true;
+          if (typeof value === "number" && value >= 1) return true;
+          return "Use 1 or higher";
+        }),
     }),
   ],
   orderings: [

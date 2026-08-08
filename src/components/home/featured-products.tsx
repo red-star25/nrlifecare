@@ -37,7 +37,7 @@ export function FeaturedProducts() {
 
         <Stagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((product) => (
-            <StaggerItem key={product.slug}>
+            <StaggerItem key={`${product.categorySlug}-${product.slug}`}>
               <Link
                 href={product.href}
                 className="group block transition-transform duration-300 hover:-translate-y-1"
