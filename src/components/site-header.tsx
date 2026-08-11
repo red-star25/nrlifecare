@@ -78,9 +78,17 @@ export function SiteHeader() {
           : "border-b border-transparent bg-sand-50/70 backdrop-blur-md"
       }`}
     >
-      <div className="shell flex h-[72px] items-center justify-between gap-6">
-        <Link href="/" aria-label={`${company.name} — home`} className="shrink-0">
-          <Logo variant="dark" priority />
+      <div className="shell flex h-[64px] items-center justify-between gap-3 md:h-[72px] md:gap-6">
+        <Link
+          href="/"
+          aria-label={`${company.name} — home`}
+          className="min-w-0 max-w-[calc(100%-3.25rem)] shrink"
+        >
+          <Logo
+            variant="dark"
+            priority
+            className="h-9 w-auto max-w-[min(190px,calc(100vw-5rem))] sm:h-11 sm:max-w-none"
+          />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
@@ -212,7 +220,7 @@ export function SiteHeader() {
           onClick={() => setMenuOpen((open) => !open)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
-          className="flex h-11 w-11 items-center justify-center rounded-full text-ink-900 ring-1 ring-sand-300 transition-colors hover:bg-white lg:hidden"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-ink-900 ring-1 ring-sand-300 transition-colors hover:bg-white sm:h-11 sm:w-11 lg:hidden"
         >
           {menuOpen ? (
             <Close className="h-5 w-5" />

@@ -22,7 +22,7 @@ export function PageHero({
   children,
 }: PageHeroProps) {
   return (
-    <section className="relative isolate overflow-hidden bg-sand-50 pt-[118px] pb-16 md:pt-[142px] md:pb-24">
+    <section className="relative isolate overflow-x-clip bg-sand-50 pt-[108px] pb-14 md:pt-[142px] md:pb-24">
       <LightAtmosphere variant="page" />
 
       {/* Soft brand mark — atmosphere, not a card */}
@@ -36,10 +36,10 @@ export function PageHero({
         <div className="absolute inset-[5.5rem] rounded-full bg-gradient-to-br from-brand-100/80 via-white/40 to-sky-100/60 blur-sm" />
       </div>
 
-      <div className="shell relative">
+      <div className="shell relative min-w-0">
         {crumbs.length ? (
-          <nav aria-label="Breadcrumb" className="mb-7">
-            <ol className="flex flex-wrap items-center gap-2 text-[12.5px] text-sand-500">
+          <nav aria-label="Breadcrumb" className="mb-5 md:mb-7">
+            <ol className="flex flex-wrap items-center gap-2 text-[12px] text-sand-500 sm:text-[12.5px]">
               <li>
                 <Link
                   href="/"
@@ -72,10 +72,10 @@ export function PageHero({
             <span className="h-px w-6 bg-brand-500/70" aria-hidden="true" />
             {eyebrow}
           </p>
-          <h1 className="mt-5 max-w-4xl text-[clamp(2.1rem,5vw,3.6rem)] leading-[1.03] font-extrabold text-ink-900">
+          <h1 className="mt-4 max-w-4xl text-[clamp(1.85rem,7vw,3.6rem)] leading-[1.06] font-extrabold text-ink-900 sm:mt-5 sm:leading-[1.03]">
             {title}
           </h1>
-          <p className="mt-6 max-w-2xl text-[17px] leading-relaxed text-sand-600">
+          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-sand-600 sm:mt-6 sm:text-[17px]">
             {lede}
           </p>
         </Reveal>

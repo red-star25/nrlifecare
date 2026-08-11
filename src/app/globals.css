@@ -84,6 +84,7 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    overflow-x: clip;
   }
 
   body {
@@ -92,6 +93,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    overflow-x: clip;
   }
 
   h1,
@@ -126,7 +128,13 @@
     width: 100%;
     max-width: 80rem;
     margin-inline: auto;
-    padding-inline: 1.25rem;
+    padding-inline: 1.125rem;
+  }
+
+  @media (min-width: 480px) {
+    .shell {
+      padding-inline: 1.25rem;
+    }
   }
 
   @media (min-width: 768px) {

@@ -3,7 +3,7 @@ import Image from "next/image";
 type LogoProps = {
   className?: string;
   variant?: "dark" | "light";
-  /** Rendered height in pixels. Width follows the logo's 293:72 ratio. */
+  /** Rendered height in pixels. Prefer Tailwind `h-*` classes for responsive sizing. */
   height?: number;
   /** Set true for the site header / hero LCP image. Leave false in grids. */
   priority?: boolean;
@@ -15,7 +15,7 @@ const NATIVE_HEIGHT = 72;
 export function Logo({
   className = "",
   variant = "dark",
-  height = 44,
+  height,
   priority = false,
 }: LogoProps) {
   const source =
@@ -30,9 +30,9 @@ export function Logo({
       width={NATIVE_WIDTH}
       height={NATIVE_HEIGHT}
       priority={priority}
-      className={`w-auto ${className}`}
-      style={{ height }}
-      sizes="240px"
+      className={`h-auto w-auto max-w-full object-contain object-left ${className}`}
+      style={height !== undefined ? { height } : undefined}
+      sizes="(max-width: 640px) 180px, 240px"
     />
   );
 }
